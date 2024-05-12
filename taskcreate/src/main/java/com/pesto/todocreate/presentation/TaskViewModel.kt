@@ -3,16 +3,19 @@ package com.pesto.todocreate.presentation
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.pesto.core.data.source.local.entity.Task
+import com.pesto.core.domain.model.Task
 import com.pesto.core.domain.states.TaskResult
 import com.pesto.core.presentation.UiEvent
 import com.pesto.todocreate.domain.usecase.TaskCreateUseCase
 import com.single.core.states.StandardTextFieldState
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+
+@HiltViewModel
 class TaskViewModel @Inject constructor(
     private val taskCreateUseCase: TaskCreateUseCase
 ):ViewModel(){
@@ -57,7 +60,7 @@ class TaskViewModel @Inject constructor(
             is TaskEvent.AddTask ->{
                 viewModelScope.launch {
 
-                    var task = Task(id = 1L, title = _titleState.value.text, description = _descState.value.text, status = "To Do")
+                    var task = Task( title = _titleState.value.text, description = _descState.value.text, status = "To Do")
                     var taskResult = TaskResult()
                     try{
                         taskResult = taskCreateUseCase.validate(task)
@@ -90,7 +93,10 @@ class TaskViewModel @Inject constructor(
     }
 
     suspend fun insert(task: Task){
-        taskCreateUseCase.insert(task)
+        viewModelScope.launch {
+            taskCreateUseCase.insert(task)
+        }
+
     }
 
     fun delete(task: Task) {

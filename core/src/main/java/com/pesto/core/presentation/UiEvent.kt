@@ -2,6 +2,7 @@ package com.pesto.core.presentation
 
 import com.single.core.presentation.util.Event
 
+
 // Created by Nagaraju Deshetty on 07/05/24.
 sealed class UiEvent: Event() {
     data class ShowSnackBar(val uiText: UiText): UiEvent()

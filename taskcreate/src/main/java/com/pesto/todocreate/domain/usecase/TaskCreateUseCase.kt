@@ -1,11 +1,13 @@
 package com.pesto.todocreate.domain.usecase
 
-import com.pesto.core.data.source.local.entity.Task
+import com.pesto.core.data.mapper.toTaskEntity
+import com.pesto.core.domain.model.Task
 import com.pesto.core.domain.repository.TaskRepository
 import com.pesto.core.domain.states.FieldStatus
 import com.pesto.core.domain.states.TaskResult
+import javax.inject.Inject
 
-class TaskCreateUseCase(
+class TaskCreateUseCase @Inject constructor(
     private var repository: TaskRepository
 ) {
 
@@ -28,15 +30,15 @@ class TaskCreateUseCase(
 
     }
     suspend fun insert(task: Task): TaskResult {
-        val result = repository.insert(task)
+        val result = repository.insert(task.toTaskEntity())
         return TaskResult(result = result)
     }
 
     fun delete(task: Task) {
-        repository.delete(task)
+        repository.delete(task.toTaskEntity())
     }
 
     fun update(task: Task) {
-        repository.update(task)
+        repository.update(task.toTaskEntity())
     }
 }

@@ -3,7 +3,9 @@ package com.pesto.core.data.di
 import android.content.Context
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import com.pesto.core.data.repository.TaskRepositoryImpl
 import com.pesto.core.data.source.local.AppDatabase
+import com.pesto.core.domain.repository.TaskRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -17,7 +19,11 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 class CoreModule {
-
+    @Provides
+    @Singleton
+    fun providesTaskRepositoryImpl(database: AppDatabase): TaskRepository {
+        return TaskRepositoryImpl(database)
+    }
     @Provides
     @Singleton
     fun provideAppDatabase(@ApplicationContext context: Context):AppDatabase{
