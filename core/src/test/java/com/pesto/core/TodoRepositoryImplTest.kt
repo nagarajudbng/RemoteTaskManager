@@ -7,7 +7,9 @@ import com.pesto.core.data.source.local.entity.Task
 import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Test
+import org.mockito.InjectMocks
 import org.mockito.Mock
+import org.mockito.Mockito.verify
 import org.mockito.Mockito.`when`
 import org.mockito.MockitoAnnotations
 
@@ -17,7 +19,7 @@ import org.mockito.MockitoAnnotations
 class TodoRepositoryImplTest {
 
 
-    @Mock
+    @InjectMocks
     private lateinit var repository: TodoRepositoryImpl
 
     @Mock
@@ -32,13 +34,20 @@ class TodoRepositoryImplTest {
     }
 
     @Test
-    fun insertTaskTest() = runBlocking {
+    fun insertTaskTest(): Unit {
+        var task = Task(id = 1, title = "task1",description = "description1",status = "To Do")
+        repository.insert(task)
+        verify(taskDao).insert(task)
+    }
+
+
+    @Test
+    fun deleteTaskTest()= runBlocking {
         var task = Task(id = 1, title = "task1",description = "description1",status = "To Do")
         `when`(appDatabase.taskDao).thenReturn(taskDao)
-        `when`(taskDao.insert(task)).thenReturn(1L)
-        repository.insert(task)
+//        `when`(taskDao.insert(task)).thenReturn(1L)
+        repository.delete(task)
+        verify(taskDao).delete(task)
     }
-    
-
 
 }
