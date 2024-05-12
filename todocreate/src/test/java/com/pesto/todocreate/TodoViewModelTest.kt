@@ -2,6 +2,7 @@ package com.pesto.todocreate
 
 import com.pesto.core.data.source.local.entity.Task
 import com.pesto.todocreate.domain.usecase.TodoCreateUseCase
+import com.pesto.todocreate.presentation.TodoViewModel
 import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Test
@@ -18,7 +19,7 @@ class TodoViewModelTest {
     private lateinit var todoCreateUseCase: TodoCreateUseCase
 
     @InjectMocks
-    private lateinit var todoViewModel:TodoViewModel
+    private lateinit var todoViewModel: TodoViewModel
 
     @Before
     fun setup(){
