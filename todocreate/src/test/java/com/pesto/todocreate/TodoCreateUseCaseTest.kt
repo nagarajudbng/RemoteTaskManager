@@ -28,7 +28,7 @@ class TodoCreateUseCaseTest {
 
     @Test
     fun insertTaskTest(): Unit = runBlocking {
-        var task = Task(id = 1, title = "Task1", description = "Description1", status = "TO DO")
+        val task = Task(id = 1, title = "Task1", description = "Description1", status = "TO DO")
 
         todoCreateUseCase.insert(task)
         verify(repository).insert(task)
