@@ -1,6 +1,9 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
+
+    kotlin("kapt")
+    alias(libs.plugins.hilt)
 }
 
 android {
@@ -66,4 +69,24 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+
+    //Room Database
+    implementation(libs.room.ktx)
+    kapt(libs.room.compiler)
+    implementation(libs.room.paging)
+
+    //navigation
+    implementation(libs.navigation.compose)
+
+    //Mockito
+    testImplementation(libs.mockito.inline)
+
+    //hilt
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.android.compiler)
+    implementation(libs.hilt.navigation.compose)
+    //coroutine test
+    testImplementation(libs.kotlinx.coroutines.test)
+
+
 }
