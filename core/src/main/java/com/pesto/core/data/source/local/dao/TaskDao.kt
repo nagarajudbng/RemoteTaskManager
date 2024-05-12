@@ -13,7 +13,7 @@ interface TaskDao {
     fun insert(task:Task):Long
 
     @Delete
-    fun delete(id:Long)
+    fun delete(task:Task)
 
     @Update
     fun update(task: Task)

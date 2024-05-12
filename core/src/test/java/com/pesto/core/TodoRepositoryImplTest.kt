@@ -8,6 +8,7 @@ import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Mock
+import org.mockito.Mockito.`when`
 import org.mockito.MockitoAnnotations
 
 
@@ -33,9 +34,11 @@ class TodoRepositoryImplTest {
     @Test
     fun insertTaskTest() = runBlocking {
         var task = Task(id = 1, title = "task1",description = "description1",status = "To Do")
-
+        `when`(appDatabase.taskDao).thenReturn(taskDao)
+        `when`(taskDao.insert(task)).thenReturn(1L)
         repository.insert(task)
     }
+    
 
 
 }
