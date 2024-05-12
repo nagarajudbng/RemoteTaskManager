@@ -46,9 +46,16 @@ class TodoRepositoryImplTest {
     fun deleteTaskTest()= runBlocking {
         var task = Task(id = 1, title = "task1",description = "description1",status = "To Do")
         `when`(appDatabase.taskDao).thenReturn(taskDao)
-//        `when`(taskDao.insert(task)).thenReturn(1L)
         repository.delete(task)
         verify(taskDao).delete(task)
     }
 
+
+    @Test
+    fun updateTaskTest()= runBlocking {
+        var task = Task(id = 1, title = "task1",description = "description1",status = "To Do")
+        `when`(appDatabase.taskDao).thenReturn(taskDao)
+        repository.update(task)
+        verify(taskDao).update(task)
+    }
 }
