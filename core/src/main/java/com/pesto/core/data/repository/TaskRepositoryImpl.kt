@@ -2,12 +2,13 @@ package com.pesto.core.data.repository
 
 import com.pesto.core.data.source.local.AppDatabase
 import com.pesto.core.data.source.local.entity.Task
-import com.pesto.core.domain.repository.TodoRepository
+import com.pesto.core.domain.repository.RowId
+import com.pesto.core.domain.repository.TaskRepository
 
-class TodoRepositoryImpl(
+class TaskRepositoryImpl(
     private var appDatabase: AppDatabase
-):TodoRepository {
-    override fun insert(task: Task): Long {
+):TaskRepository {
+    override fun insert(task: Task): RowId {
         return appDatabase.taskDao.insert(task)
     }
 

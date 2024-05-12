@@ -1,8 +1,8 @@
 package com.pesto.todocreate
 
-import com.pesto.core.data.repository.TodoRepositoryImpl
+import com.pesto.core.data.repository.TaskRepositoryImpl
 import com.pesto.core.data.source.local.entity.Task
-import com.pesto.todocreate.domain.usecase.TodoCreateUseCase
+import com.pesto.todocreate.domain.usecase.TaskCreateUseCase
 import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Test
@@ -13,14 +13,14 @@ import org.mockito.Mockito.verify
 
 // Created by Nagaraju on 13/05/24.
 
-class TodoCreateUseCaseTest {
+class TaskCreateUseCaseTest {
 
 
     @Mock
-    private lateinit var repository: TodoRepositoryImpl
+    private lateinit var repository: TaskRepositoryImpl
 
     @InjectMocks
-    private lateinit var todoCreateUseCase: TodoCreateUseCase
+    private lateinit var todoCreateUseCase: TaskCreateUseCase
     @Before
     fun setup(){
         MockitoAnnotations.initMocks(this)

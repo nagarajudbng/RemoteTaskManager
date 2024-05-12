@@ -1,6 +1,6 @@
 package com.pesto.core
 
-import com.pesto.core.data.repository.TodoRepositoryImpl
+import com.pesto.core.data.repository.TaskRepositoryImpl
 import com.pesto.core.data.source.local.AppDatabase
 import com.pesto.core.data.source.local.dao.TaskDao
 import com.pesto.core.data.source.local.entity.Task
@@ -17,11 +17,11 @@ import org.mockito.MockitoAnnotations
 
 // Created by Nagaraju on 12/05/24.
 
-class TodoRepositoryImplTest {
+class TaskRepositoryImplTest {
 
 
     @InjectMocks
-    private lateinit var repository: TodoRepositoryImpl
+    private lateinit var repository: TaskRepositoryImpl
 
     @Mock
     private lateinit  var appDatabase: AppDatabase
