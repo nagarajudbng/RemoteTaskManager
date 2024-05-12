@@ -10,4 +10,8 @@ class TodoRepositoryImpl(
         appDatabase.taskDao.insert(task)
     }
 
+    fun delete(task: Task) {
+        appDatabase.taskDao.delete(task)
+    }
+
 }

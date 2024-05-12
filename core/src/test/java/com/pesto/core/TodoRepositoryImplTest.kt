@@ -36,6 +36,7 @@ class TodoRepositoryImplTest {
     @Test
     fun insertTaskTest(): Unit {
         var task = Task(id = 1, title = "task1",description = "description1",status = "To Do")
+        `when`(appDatabase.taskDao).thenReturn(taskDao)
         repository.insert(task)
         verify(taskDao).insert(task)
     }
