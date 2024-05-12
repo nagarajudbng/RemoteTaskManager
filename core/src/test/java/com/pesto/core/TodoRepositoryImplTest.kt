@@ -4,6 +4,7 @@ import com.pesto.core.data.repository.TodoRepositoryImpl
 import com.pesto.core.data.source.local.AppDatabase
 import com.pesto.core.data.source.local.dao.TaskDao
 import com.pesto.core.data.source.local.entity.Task
+import junit.framework.TestCase.assertEquals
 import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Test
@@ -35,10 +36,14 @@ class TodoRepositoryImplTest {
 
     @Test
     fun insertTaskTest(): Unit {
+        val expectedId = 123L
         var task = Task(id = 1, title = "task1",description = "description1",status = "To Do")
         `when`(appDatabase.taskDao).thenReturn(taskDao)
-        repository.insert(task)
+        `when`(taskDao.insert(task)).thenReturn(expectedId)
+
+        val result =  repository.insert(task)
         verify(taskDao).insert(task)
+        assertEquals(expectedId, result)
     }
 
 

@@ -6,7 +6,7 @@ import com.pesto.core.data.source.local.entity.Task
 // Created by Nagaraju on 13/05/24.
 
 interface TodoRepository {
-    fun insert(task: Task)
+    fun insert(task: Task): Long
 
     fun delete(task: Task)
 

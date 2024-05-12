@@ -2,7 +2,6 @@ package com.pesto.todocreate
 
 import com.pesto.core.data.repository.TodoRepositoryImpl
 import com.pesto.core.data.source.local.entity.Task
-import com.pesto.core.domain.repository.TodoRepository
 import com.pesto.todocreate.domain.usecase.TodoCreateUseCase
 import kotlinx.coroutines.runBlocking
 import org.junit.Before
@@ -35,4 +34,17 @@ class TodoCreateUseCaseTest {
         verify(repository).insert(task)
     }
 
+    @Test
+    fun deleteTaskTest() = runBlocking {
+        var task = Task(id = 1, title = "Task1", description = "Description1", status = "TO DO")
+        todoCreateUseCase.delete(task)
+        verify(repository).delete(task)
+    }
+
+    @Test
+    fun updateTaskTest() = runBlocking {
+        var task = Task(id = 1, title = "Task1", description = "Description1", status = "TO DO")
+        todoCreateUseCase.update(task)
+        verify(repository).update(task)
+    }
 }

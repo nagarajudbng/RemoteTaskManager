@@ -7,8 +7,8 @@ import com.pesto.core.domain.repository.TodoRepository
 class TodoRepositoryImpl(
     private var appDatabase: AppDatabase
 ):TodoRepository {
-    override fun insert(task: Task) {
-        appDatabase.taskDao.insert(task)
+    override fun insert(task: Task): Long {
+        return appDatabase.taskDao.insert(task)
     }
 
     override fun delete(task: Task) {

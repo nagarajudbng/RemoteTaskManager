@@ -10,4 +10,11 @@ class TodoCreateUseCase(
         repository.insert(task)
     }
 
+    fun delete(task: Task) {
+        repository.delete(task)
+    }
+
+    fun update(task: Task) {
+        repository.update(task)
+    }
 }
