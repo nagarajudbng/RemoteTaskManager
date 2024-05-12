@@ -23,3 +23,4 @@ rootProject.name = "RemoteTaskManager"
 include(":app")
 include(":core")
 include(":taskcreate")
+include(":taskhome")
