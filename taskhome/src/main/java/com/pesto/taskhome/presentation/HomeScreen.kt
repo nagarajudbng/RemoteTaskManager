@@ -348,7 +348,7 @@ fun PopUpMenuButton(
                         },
                         onClick = {
                             expanded = false
-                            action(item.id)
+                            action(item.label)
                         }
                     )
                 }
