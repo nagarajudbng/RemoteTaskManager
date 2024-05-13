@@ -24,3 +24,12 @@ fun Task.toTaskEntity():TaskEntity{
         status = status
     )
 }
+
+fun Task.toUpdateTaskEntity():TaskEntity{
+    return TaskEntity(
+        id = id,
+        title = title,
+        description=description,
+        status = status
+    )
+}

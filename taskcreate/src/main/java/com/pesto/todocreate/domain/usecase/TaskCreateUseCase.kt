@@ -13,32 +13,25 @@ class TaskCreateUseCase @Inject constructor(
 
 
     suspend fun validate(task: Task): TaskResult {
-        var taskResult= TaskResult()
+        val taskResult = TaskResult()
 
-        if (task.title?.contains("Error") == true) {
-            throw IllegalArgumentException("Title cannot contain 'Error' text.")
-        }
-        taskResult.title = if(task.title?.isEmpty() == true || task.title.equals("Error"))
-            FieldStatus.FieldEmpty else FieldStatus.FieldFilled
-        taskResult.description = if(task.description?.isEmpty() == true || task.description.equals("Error"))
-            FieldStatus.FieldEmpty else FieldStatus.FieldFilled
-        taskResult.isValid = !(taskResult.title == FieldStatus.FieldEmpty
-                ||taskResult.description == FieldStatus.FieldEmpty)
+        taskResult.title =
+            if (task.title.isEmpty()) FieldStatus.FieldEmpty else FieldStatus.FieldFilled
+        taskResult.description =
+            if (task.description.isEmpty()) FieldStatus.FieldEmpty else FieldStatus.FieldFilled
+        taskResult.status =
+            if (task.status.isEmpty() || task.status == "Select") FieldStatus.FieldEmpty else FieldStatus.FieldFilled
+        taskResult.isValid =
+            !(taskResult.title == FieldStatus.FieldEmpty || taskResult.description == FieldStatus.FieldEmpty)
 
         return taskResult
 
 
     }
+
     suspend fun insert(task: Task): TaskResult {
         val result = repository.insert(task.toTaskEntity())
         return TaskResult(result = result)
     }
 
-    fun delete(task: Task) {
-        repository.delete(task.toTaskEntity())
-    }
-
-    fun update(task: Task) {
-        repository.update(task.toTaskEntity())
-    }
 }

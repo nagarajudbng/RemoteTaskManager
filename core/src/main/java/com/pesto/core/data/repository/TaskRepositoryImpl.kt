@@ -13,11 +13,11 @@ class TaskRepositoryImpl(
         return appDatabase.taskDao.insert(task)
     }
 
-    override fun delete(task: TaskEntity) {
-        appDatabase.taskDao.delete(task)
+    override suspend fun delete(task: TaskEntity) {
+        appDatabase.taskDao.delete(task.id)
     }
 
-    override fun update(task: TaskEntity) {
+    override suspend fun update(task: TaskEntity) {
         appDatabase.taskDao.update(task)
     }
 

@@ -1,10 +1,12 @@
 package com.pesto.taskhome.presentation
 
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.traceEventEnd
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.pesto.core.domain.model.Task
 import com.pesto.core.presentation.UiEvent
+import com.single.core.states.StandardTextFieldState
 import com.single.todohome.usecases.HomeTaskUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -30,6 +32,12 @@ class HomeTaskViewModel @Inject constructor(
 
     private val _focusState = mutableStateOf(true)
     val focusState = _focusState
+
+    private val _sortState = mutableStateOf(StandardTextFieldState())
+    val sortState = _sortState
+
+    private val _filterState = mutableStateOf(StandardTextFieldState())
+    val filterState = _filterState
 
     private val _topBarState = mutableStateOf(false)
     val topBarState = _topBarState
@@ -74,6 +82,29 @@ class HomeTaskViewModel @Inject constructor(
               }
          }
 
+    }
+
+    fun onEvent(event: TaskUpdateEvent){
+        when(event){
+           is TaskUpdateEvent.EnteredActionUpdate ->{
+               viewModelScope.launch {
+                   val task = Task(
+                       id = event.task.id,
+                       title = event.task.title,
+                       description = event.task.description,
+                       status = event.action
+                   )
+                   if(event.action == "Delete"){
+                       homeTodoUseCase.delete(task)
+                   } else {
+                       homeTodoUseCase.update(task)
+                   }
+                   getTaskList()
+               }
+           }
+
+            else -> {}
+        }
     }
 
 }

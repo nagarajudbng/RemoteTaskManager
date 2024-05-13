@@ -10,5 +10,6 @@ data class TaskResult(
     var isValid:Boolean = false,
     var title: FieldStatus?= null,
     var description:FieldStatus? = null,
+    var status:FieldStatus? = null,
     val result: RowId?=null
 )

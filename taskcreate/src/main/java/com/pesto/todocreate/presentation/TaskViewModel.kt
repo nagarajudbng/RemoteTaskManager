@@ -1,5 +1,6 @@
 package com.pesto.todocreate.presentation
 
+import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -18,7 +19,7 @@ import javax.inject.Inject
 @HiltViewModel
 class TaskViewModel @Inject constructor(
     private val taskCreateUseCase: TaskCreateUseCase
-):ViewModel(){
+) : ViewModel() {
 
 
     private val _titleState = mutableStateOf(StandardTextFieldState())
@@ -26,6 +27,9 @@ class TaskViewModel @Inject constructor(
 
     private val _descState = mutableStateOf(StandardTextFieldState())
     val descState = _descState
+
+    private val _statusState = mutableStateOf(StandardTextFieldState("Select"))
+    var statusState: State<StandardTextFieldState> = _statusState
 
     private val _eventFlow = MutableSharedFlow<UiEvent>()
     val eventFlow = _eventFlow.asSharedFlow()
@@ -37,50 +41,62 @@ class TaskViewModel @Inject constructor(
     val searchQuery = _searchQuery
 
 
-    fun onEvent(event: TaskEvent){
-        when(event){
+    fun onEvent(event: TaskEvent) {
+        when (event) {
 
-            is TaskEvent.EnteredTitle ->{
+            is TaskEvent.EnteredTitle -> {
                 _titleState.value = titleState.value.copy(
                     text = event.title
                 )
             }
-            is TaskEvent.EnteredDescription ->{
+
+            is TaskEvent.EnteredDescription -> {
                 _descState.value = descState.value.copy(
                     text = event.description
                 )
             }
-            is TaskEvent.DialogueEvent ->{
+
+            is TaskEvent.EnteredStatus -> {
+                _statusState.value = statusState.value.copy(
+                    text = event.status
+                )
+            }
+
+            is TaskEvent.DialogueEvent -> {
                 _dialogState.value = event.isDismiss
                 viewModelScope.launch {
                     _eventFlow.emit(UiEvent.NavigateUp("Finished"))
                 }
 
             }
-            is TaskEvent.AddTask ->{
+
+            is TaskEvent.AddTask -> {
                 viewModelScope.launch {
 
-                    var task = Task( title = _titleState.value.text, description = _descState.value.text, status = "To Do")
+                    var task = Task(
+                        title = _titleState.value.text,
+                        description = _descState.value.text,
+                        status = _statusState.value.text
+                    )
                     var taskResult = TaskResult()
-                    try{
-                        taskResult = taskCreateUseCase.validate(task)
-                    } catch (e:IllegalArgumentException){
-                        _eventFlow.emit(UiEvent.NavigateUp("Exception"))
-//                        _eventFlow.emit(UiEvent.ShowSnackBar(UiText.DynamicString("Failed to add TODO")))
-                    }
+                    taskResult = taskCreateUseCase.validate(task)
 
-                    if(!taskResult.isValid) {
+
+                    if (!taskResult.isValid) {
                         _descState.value = descState.value.copy(
                             error = taskResult.description
                         )
                         _titleState.value = titleState.value.copy(
                             error = taskResult.title
                         )
+                        _statusState.value = statusState.value.copy(
+                            error = taskResult.status
+                        )
                     } else {
-                        dialogState.value=true
+                        dialogState.value = true
                         taskResult = taskCreateUseCase.insert(task = task)
                         taskResult.result?.let {
-                            if(it>0){
+                            if (it > 0) {
 //                                _dialogState.value = true
                             }
                         }
@@ -92,20 +108,11 @@ class TaskViewModel @Inject constructor(
 
     }
 
-    suspend fun insert(task: Task){
+    suspend fun insert(task: Task) {
         viewModelScope.launch {
             taskCreateUseCase.insert(task)
         }
 
     }
-
-    fun delete(task: Task) {
-        taskCreateUseCase.delete(task)
-    }
-
-    fun update(task: Task) {
-        taskCreateUseCase.update(task)
-    }
-
 
 }

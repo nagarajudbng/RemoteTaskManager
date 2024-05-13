@@ -13,16 +13,15 @@ interface TaskDao {
 
     @Insert
     suspend fun insert(task: TaskEntity):Long
-
-    @Delete
-    fun delete(task:TaskEntity)
+    @Query("DELETE FROM TaskEntity WHERE id = :taskID")
+    suspend fun delete(taskID:Long)
 
     @Update
-    fun update(task: TaskEntity)
+    suspend fun update(task: TaskEntity)
     @Query("SELECT * FROM TaskEntity")
     fun getTaskList(): Flow<List<TaskEntity>>
 
     @Query("SELECT * FROM TaskEntity WHERE title LIKE '%' || :searchQuery || '%'")
-    fun search(searchQuery:String): Flow<List<TaskEntity>>
+     fun search(searchQuery:String): Flow<List<TaskEntity>>
 
 }

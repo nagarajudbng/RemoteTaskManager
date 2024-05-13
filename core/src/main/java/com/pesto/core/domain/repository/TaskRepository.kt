@@ -9,9 +9,9 @@ typealias  RowId = Long
 interface TaskRepository {
     suspend fun insert(task: TaskEntity): RowId
 
-    fun delete(task: TaskEntity)
+    suspend fun delete(task: TaskEntity)
 
-    fun update(task: TaskEntity)
+    suspend fun update(task: TaskEntity)
     suspend fun getTaskList(): Flow<List<TaskEntity>>
     suspend fun searchQuery(query: String): Flow<List<TaskEntity>>
 }
