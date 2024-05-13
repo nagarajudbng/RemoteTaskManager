@@ -12,6 +12,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -31,6 +33,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.Black
 import androidx.compose.ui.graphics.Color.Companion.White
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
@@ -46,6 +49,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.pesto.core.presentation.UiEvent
 import com.pesto.core.domain.states.FieldStatus
 import com.pesto.core.presentation.AppBar
+import com.pesto.core.presentation.CustomDropDownMenu
 import com.pesto.core.presentation.asString
 import com.pesto.todocreate.R
 import kotlinx.coroutines.delay
@@ -93,10 +97,10 @@ fun TaskCreateScreen(
         topBar = {
             AppBar(
                 title = stringResource(id = R.string.create_task_title),
-                isSearchEnable = false,
                 searchClick = {
                 },
-                backClick = {}
+                backClick = {},
+                isSearchEnable = false
             )
         }
     ) {
@@ -181,6 +185,17 @@ fun TaskCreateScreen(
                     }
                 },
             )
+            Spacer(modifier = Modifier.height(16.dp))
+            CustomDropDownMenu(
+                modifier = Modifier,
+                label = "Jell",
+                selected = viewModel.statusState.value.text,
+                list = listOf("Done","To Do","In Progress",),
+                errorStatus = viewModel.statusState.value.error,
+                onSelected = {
+                    viewModel.onEvent(TaskEvent.EnteredStatus(it))
+                }
+            )
             Row(
                 modifier = Modifier
                     .fillMaxSize(),
@@ -240,3 +255,5 @@ fun DialogTime(viewModel: TaskViewModel){
         }
     }
 }
+
+
