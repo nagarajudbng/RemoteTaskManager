@@ -1,6 +1,8 @@
 package com.pesto.taskhome.presentation
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -8,36 +10,57 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.Card
+import androidx.compose.material3.DrawerValue
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shadow
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.pesto.core.domain.model.Task
 import com.pesto.core.presentation.AppBar
+import com.pesto.core.presentation.PopUpMenuButton
+import com.pesto.core.presentation.PopUpMenuItem
 import com.pesto.core.presentation.UiEvent
 import com.pesto.core.presentation.asString
 import com.pesto.taskhome.R
 import kotlinx.coroutines.flow.collectLatest
 
 // Created by Nagaraju Deshetty on 07/05/24.
+
+
 @Composable
 @Preview
 fun HomeScreenPreview() {
@@ -45,14 +68,17 @@ fun HomeScreenPreview() {
         onNavigation = {},
         onSnackBarMessage = {})
 }
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
     onNavigation: (String) -> Unit,
-    onSnackBarMessage:(String)->Unit
+    onSnackBarMessage: (String) -> Unit
 ) {
     var viewModel = hiltViewModel<HomeTaskViewModel>()
-    var  context = LocalContext.current
+    var context = LocalContext.current
+    val drawerState = remember { mutableStateOf(DrawerValue.Closed) }
+
     LaunchedEffect(key1 = true) {
         viewModel.getTaskList()
         viewModel.eventFlow.collectLatest { event ->
@@ -60,6 +86,7 @@ fun HomeScreen(
                 is UiEvent.ShowSnackBar -> {
                     onSnackBarMessage(event.uiText.asString(context))
                 }
+
                 else -> {}
             }
 
@@ -78,7 +105,7 @@ fun HomeScreen(
                 containerColor = Color(0xFF396803)
 //                Modifier.background(Color(0xFF396803))
             ) {
-                Icon(Icons.Filled.Add,"")
+                Icon(Icons.Filled.Add, "")
             }
         }
     ) {
@@ -90,58 +117,70 @@ fun HomeScreen(
                     bottom = it.calculateBottomPadding()
                 )
         ) {
-            showTodoList(viewModel)
+            ShowTodoList(viewModel)
         }
     }
 }
+
+
 @Composable
-fun TopBarView(viewModel: HomeTaskViewModel){
-    var showSearch = viewModel.topBarState.value
-    if(!showSearch) {
+fun TopBarView(viewModel: HomeTaskViewModel) {
+    val showSearch = viewModel.topBarState.value
+    if (!showSearch) {
         AppBar(
             title = stringResource(id = R.string.app_bar_title),
             searchClick = {
                 viewModel.onSearchEvent(SearchEvent.TopSearchSelected(true))
             },
             backClick = {},
-            isSearchEnable = true
+            isSearchEnable = true,
         )
-    }else{
-    SearchBar(
-        Modifier.padding(horizontal = 16.dp),
-        onSearchTextEntered = {
-            viewModel.onSearchEvent(SearchEvent.OnSearchQuery(it))
-        },
-        onSearchStart = {
-            viewModel.onSearchEvent(SearchEvent.OnSearchStart(it))
-        },
-        onFocusChange = {
-            viewModel.onSearchEvent((SearchEvent.OnFocusChange(it)))
-        },
-        onBackPressed = {
-            viewModel.onSearchEvent(SearchEvent.OnSearchQuery(""))
-            viewModel.onSearchEvent(SearchEvent.OnClearPressed)
-        },
-        onClearPressed = {
-            viewModel.onSearchEvent(SearchEvent.OnClearPressed)
-        },
-        viewModel.searchQuery.value,
-        viewModel.focusState.value
-    )
+    } else {
+        SearchBar(
+            Modifier.padding(horizontal = 16.dp),
+            onSearchTextEntered = {
+                viewModel.onSearchEvent(SearchEvent.OnSearchQuery(it))
+            },
+            onSearchStart = {
+                viewModel.onSearchEvent(SearchEvent.OnSearchStart(it))
+            },
+            onFocusChange = {
+                viewModel.onSearchEvent((SearchEvent.OnFocusChange(it)))
+            },
+            onBackPressed = {
+                viewModel.onSearchEvent(SearchEvent.OnSearchQuery(""))
+                viewModel.onSearchEvent(SearchEvent.OnClearPressed)
+            },
+            onClearPressed = {
+                viewModel.onSearchEvent(SearchEvent.OnClearPressed)
+            },
+            viewModel.searchQuery.value,
+            viewModel.focusState.value
+        )
     }
 }
-@Composable
-fun showTodoList(viewModel: HomeTaskViewModel){
 
-    var todoList = viewModel.todoList.value
-    if(todoList.size>0) {
+@Composable
+fun ShowTodoList(viewModel: HomeTaskViewModel) {
+
+    val todoList = viewModel.todoList.value
+
+
+    if (todoList.isNotEmpty()) {
+
         LazyColumn(
             modifier = Modifier.fillMaxWidth(),
             contentPadding = PaddingValues(16.dp)
         )
         {
+
             items(todoList.size) { item ->
-                ListItem(todoList.get(item))
+                ListItem(
+                    todoList[item],
+                    action = { l, s ->
+                        viewModel.onEvent(TaskUpdateEvent.EnteredActionUpdate(l, s))
+                    }
+                )
             }
         }
     } else {
@@ -149,7 +188,7 @@ fun showTodoList(viewModel: HomeTaskViewModel){
             modifier = Modifier.fillMaxSize(),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
-        ){
+        ) {
             Text(
                 text = "Press the + button to add a TODO item"
             )
@@ -159,35 +198,198 @@ fun showTodoList(viewModel: HomeTaskViewModel){
 
 @Preview
 @Composable
-fun ListItemPreview(){
-    ListItem(Task(title = "Hello", description = "Description", status = ""))
+fun ListItemPreview() {
+//    ListItem(Task(title = "Hello", description = "Description", status = ""))
 }
+
 @Composable
-fun ListItem(task: Task){
+fun ListItem(
+    task: Task,
+    action: (Task, String) -> Unit
+) {
 
     Card(
         modifier = Modifier
             .padding(2.dp)
             .fillMaxWidth()
-            .height(60.dp),
+            .height(80.dp),
         shape = MaterialTheme.shapes.medium,
     ) {
         Row(
-            modifier = Modifier
-                .fillMaxSize(),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Start
+            modifier = Modifier.fillMaxSize()
         ) {
-            task.title.let {
-                Text(
-                    modifier = Modifier.padding(start = 10.dp),
-                    text = it,
-                    fontFamily = FontFamily.Monospace,
-                    fontWeight = FontWeight.Light,
-                    style = MaterialTheme.typography.bodyLarge,
-                    color = MaterialTheme.colorScheme.onSurface,
-                )
+
+            Box(
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(start = 10.dp)
+                    .align(Alignment.CenterVertically)
+            ) {
+                Column(
+
+                ) {
+                    Text(
+                        modifier = Modifier,
+                        text = task.title,
+                        fontFamily = FontFamily.Monospace,
+                        fontWeight = FontWeight.Light,
+                        style = TextStyle(
+                            fontSize = 16.sp,
+                            shadow = Shadow(
+                                color = Color.Black, offset = Offset(-.0f, 0.0f), blurRadius = 0f
+                            )
+                        )
+
+                    )
+                    Text(
+                        modifier = Modifier,
+                        text = task.description,
+                        fontFamily = FontFamily.Monospace,
+                        fontWeight = FontWeight.Light,
+                        style = TextStyle(
+                            fontSize = 12.sp,
+                            shadow = Shadow(
+                                color = Color.Black, offset = Offset(0.0f, 0.0f), blurRadius = 0f
+                            )
+                        )
+                    )
+                }
+            }
+            Box(modifier = Modifier.weight(1f)) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxSize(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.End
+                ) {
+                    Text(
+                        modifier = Modifier,
+                        text = task.status,
+                        fontFamily = FontFamily.Monospace,
+                        fontWeight = FontWeight.Light,
+                        style = TextStyle(
+                            fontSize = 12.sp,
+                            shadow = Shadow(
+                                color = Color.Black, offset = Offset(0.0f, 0.0f), blurRadius = 0f
+                            )
+                        )
+                    )
+
+
+
+                    PopUpMenuButton(
+                        modifier = Modifier.wrapContentSize(),
+                        options = popUpMenu,
+                        imageVector = Icons.Filled.MoreVert,
+                        action = {
+                            action(task, it)
+                        },
+                                iconTint = Color.Black
+                    )
+//                    IconButton(onClick = {
+//
+//                    }) {
+//                        Icon(imageVector = Icons.Filled.MoreVert, contentDescription = "")
+//                    }
+                }
+
             }
         }
     }
+}
+
+var popUpMenu = listOf(
+    PopUpMenuItem(id = "1", label = "Done"),
+    PopUpMenuItem(id = "2", label = "To Do"),
+    PopUpMenuItem(id = "3", label = "In Progress"),
+    PopUpMenuItem(id = "4", label = "Delete")
+)
+data class PopUpMenuItem(
+    val id: String,
+    val label: String
+)
+@Composable
+fun PopUpMenuButton(
+    options: List<PopUpMenuItem>,
+    action: (String) -> Unit,
+//    ,
+//    iconTint: Color = Color.Black,
+    modifier: Modifier
+) {
+
+    var expanded by remember { mutableStateOf(false) }
+
+    Column() {
+
+        Box() {
+            IconButton(onClick = {
+                expanded = !expanded
+            }) {
+                Icon(
+                    imageVector = Icons.Filled.MoreVert,
+                    contentDescription = null,
+                    modifier = Modifier.wrapContentSize()
+                )
+            }
+        }
+
+        Box(modifier = modifier) {
+            DropdownMenu(
+                expanded = expanded,
+                onDismissRequest = { expanded = false },
+                modifier = Modifier
+                    .widthIn(min = 120.dp, max = 240.dp)
+                    .background(MaterialTheme.colorScheme.background)
+            ) {
+                options.forEachIndexed { _, item ->
+                    DropdownMenuItem(
+                        text = {
+                            Text(text = item.label)
+                        },
+                        onClick = {
+                            expanded = false
+                            action(item.id)
+                        }
+                    )
+                }
+                /*
+                options.forEachIndexed { _, item ->
+                    DropdownMenuItem(
+                        text = { Text(text = "label") },
+                        onClick = {
+                        expanded = false
+                        action(item.id)
+                    }) {
+                        Row(
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically,
+                        ) {
+                            Icon(
+                                painterResource(id = item.icon),
+                                contentDescription = null,
+                                tint = iconTint,
+                            )
+                            Spacer(modifier = Modifier.width(8.dp))
+                            Text(
+                                text = item.label,
+                                style = TextStyle(
+                                    fontSize = 12.sp,
+                                    shadow = Shadow(
+                                        color = Color.Black, offset = Offset(0.0f, 0.0f), blurRadius = 0f
+                                    )
+                                ),
+                                overflow = TextOverflow.Ellipsis
+                            )
+                        }
+                    }
+                    if (item.hasBottomDivider) {
+                        Divider()
+                    }
+                }
+
+                 */
+            }
+        }
+    }
+
 }
