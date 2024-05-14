@@ -1,13 +1,9 @@
 package com.single.todohome.usecases
 
-import android.util.Log
-import com.pesto.core.data.mapper.toTaskEntity
 import com.pesto.core.data.mapper.toUpdateTaskEntity
 import com.pesto.core.data.repository.TaskLocalRepositoryImpl
 import com.pesto.core.data.repository.TaskRemoteRepositoryImpl
 import com.pesto.core.domain.model.Task
-import com.pesto.core.domain.repository.TaskRepository
-import com.pesto.taskhome.presentation.TaskUpdateEvent
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
@@ -24,7 +20,8 @@ class HomeTaskUseCase @Inject constructor(
                     id = taskEntity.id,
                     title = taskEntity.title,
                     description = taskEntity.description,
-                    status = taskEntity.status
+                    status = taskEntity.status,
+                    dueDate = taskEntity.dueDate
                 )
             }
         }
@@ -37,7 +34,8 @@ class HomeTaskUseCase @Inject constructor(
                      id=taskEntity.id,
                      title = taskEntity.title,
                      description = taskEntity.description,
-                     status = taskEntity.status
+                     status = taskEntity.status,
+                     dueDate = taskEntity.dueDate
                  )
              }
          }

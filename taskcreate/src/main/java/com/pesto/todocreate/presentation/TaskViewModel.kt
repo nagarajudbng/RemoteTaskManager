@@ -82,7 +82,8 @@ class TaskViewModel @Inject constructor(
                     var task = Task(
                         title = _titleState.value.text,
                         description = _descState.value.text,
-                        status = _statusState.value.text
+                        status = _statusState.value.text,
+                        dueDate = _dateSelectedState.value.text
                     )
                     var taskResult = TaskResult()
                     taskResult = taskCreateUseCase.validate(task)

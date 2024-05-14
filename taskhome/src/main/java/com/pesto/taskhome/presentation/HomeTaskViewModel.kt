@@ -1,7 +1,6 @@
 package com.pesto.taskhome.presentation
 
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.traceEventEnd
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.pesto.core.domain.model.Task
@@ -92,7 +91,8 @@ class HomeTaskViewModel @Inject constructor(
                        id = event.task.id,
                        title = event.task.title,
                        description = event.task.description,
-                       status = event.action
+                       status = event.action,
+                       dueDate = event.task.dueDate
                    )
                    if(event.action == "Delete"){
                        homeTodoUseCase.delete(task)

@@ -29,7 +29,13 @@ class TaskViewModelTest {
 
     @Test
     fun insertTaskTest(): Unit = runBlocking {
-        val task = Task(id = 1, title = "Task1", description = "Description1", status = "TO DO")
+        val task = Task(
+            id = 1,
+            title = "Task1",
+            description = "Description1",
+            status = "TO DO",
+            dueDate = _dateSelectedState.value.text
+        )
 
         todoViewModel.insert(task)
         verify(todoCreateUseCase).insert(task)

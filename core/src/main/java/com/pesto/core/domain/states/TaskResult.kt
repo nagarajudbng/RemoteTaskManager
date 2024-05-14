@@ -11,5 +11,6 @@ data class TaskResult(
     var title: FieldStatus?= null,
     var description:FieldStatus? = null,
     var status:FieldStatus? = null,
+    var dueDate:FieldStatus? = null,
     val result: RowId?=null
 )
