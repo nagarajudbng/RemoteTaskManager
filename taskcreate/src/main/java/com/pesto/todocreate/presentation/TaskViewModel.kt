@@ -25,7 +25,7 @@ class TaskViewModel @Inject constructor(
     private val _dateState = mutableStateOf(false)
     val dateState = _dateState
 
-    private val _dateSelectedState = mutableStateOf(StandardTextFieldState())
+    private val _dateSelectedState = mutableStateOf(StandardTextFieldState("Due date"))
     val dateSelectedState = _dateSelectedState
 
     private val _titleState = mutableStateOf(StandardTextFieldState())
@@ -59,6 +59,11 @@ class TaskViewModel @Inject constructor(
             is TaskEvent.EnteredDescription -> {
                 _descState.value = descState.value.copy(
                     text = event.description
+                )
+            }
+            is TaskEvent.EnteredDueDate -> {
+                _dateSelectedState.value = dateSelectedState.value.copy(
+                    text = event.date
                 )
             }
 
@@ -104,7 +109,6 @@ class TaskViewModel @Inject constructor(
                         taskResult = taskCreateUseCase.insert(task = task)
                         taskResult.result?.let {
                             if (it > 0) {
-//                                _dialogState.value = true
                             }
                         }
                     }

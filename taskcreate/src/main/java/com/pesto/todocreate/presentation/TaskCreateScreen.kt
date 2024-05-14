@@ -29,11 +29,14 @@ import androidx.compose.material3.DatePickerFormatter
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -92,20 +95,17 @@ fun TaskCreateScreen(
 ) {
     val viewModel = hiltViewModel<TaskViewModel>()
     val  context = LocalContext.current
-    val dateState = viewModel.dateState.value
     ProgressDialogBox(viewModel = viewModel)
     LaunchedEffect(key1 = true) {
         viewModel.eventFlow.collectLatest { event ->
             when (event) {
                 is UiEvent.NavigateUp -> {
-//                    sharedViewModel.messageState.value = event.message
                     onNavigation("Back")
                 }
                 is UiEvent.ShowSnackBar -> {
                     onSnackBarMessage(event.uiText.asString(context))
                 }
                 is UiEvent.Message -> {
-//                    sharedViewModel.messageState.value = event.message
                 }
                 else -> {}
             }
@@ -120,7 +120,9 @@ fun TaskCreateScreen(
                 backClick = {},
                 isSearchEnable = false,
                 isFilterEnable = false,
+                isProfileEnable = false,
                 filter = {}
+
             )
         }
     ) {
@@ -217,42 +219,54 @@ fun TaskCreateScreen(
                 }
             )
             Spacer(modifier = Modifier.height(16.dp))
-            Row(modifier = Modifier
-            ){
 
-                Text(
-                    text = "Due Date",
+            OutlinedTextField(
+                modifier = Modifier.fillMaxWidth(),
+                value = viewModel.dateSelectedState.value.text,
+                onValueChange = {
+                    viewModel.dateSelectedState.value.text = it
+                },
+                readOnly = true,
+                enabled = false,
+                colors = OutlinedTextFieldDefaults.colors(
+                    disabledTextColor = MaterialTheme.colorScheme.onSurface,
+                    disabledContainerColor = Color.Transparent,
+                    disabledBorderColor = MaterialTheme.colorScheme.outline,
+                    disabledLeadingIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                    disabledTrailingIconColor = MaterialTheme.colorScheme.onSurface,
+                    disabledLabelColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                    disabledPlaceholderColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                    disabledSupportingTextColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                    disabledPrefixColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                    disabledSuffixColor = MaterialTheme.colorScheme.onSurfaceVariant
+                ),
+
+                maxLines= 1,
+                textStyle = TextStyle(
+                    color = Black,
                     fontFamily = FontFamily.Monospace,
                     fontWeight = FontWeight.Light,
-                    style = MaterialTheme.typography.bodyLarge,
-                    color = MaterialTheme.colorScheme.onSurface,
-                )
-                Spacer(modifier = Modifier.width(16.dp))
-                DatePickerWithDialog(
-                    onSelected = {
-                    viewModel.dateSelectedState.value.text = it
-                })
-                if (viewModel.dateSelectedState.value.error  == FieldStatus.FieldEmpty) {
-                    Text(
-                        modifier = Modifier.fillMaxWidth(),
-                        text = "Due Date Required",
-                        color = MaterialTheme.colorScheme.error
-                    )
-                }
-//                IconButton(onClick = {
-//                    viewModel.dateState.value = true
-//                }) {
-//                    Icon(imageVector = Icons.Filled.DateRange, contentDescription = "")
-//                }
-//
-//                Text(
-//                    text = viewModel.dateSelectedState.value.text,
-//                    fontFamily = FontFamily.Monospace,
-//                    fontWeight = FontWeight.Light,
-//                    style = MaterialTheme.typography.bodyLarge,
-//                    color = MaterialTheme.colorScheme.onSurface,
-//                )
-            }
+                    fontSize = with(LocalDensity.current) { 14.sp }
+
+                ),
+
+                trailingIcon = {
+                    DatePickerWithDialog(
+                        onSelected = {
+//                            viewModel.dateSelectedState.value.text = it
+                            viewModel.onEvent(TaskEvent.EnteredDueDate(it))
+                        })
+                },
+                supportingText = {
+                    if (viewModel.descState.value.error  == FieldStatus.FieldEmpty) {
+                        Text(
+                            modifier = Modifier.fillMaxWidth(),
+                            text = "Date Selection Required",
+                            color = MaterialTheme.colorScheme.error
+                        )
+                    }
+                },
+            )
             Spacer(modifier = Modifier.height(16.dp))
             Row(
                 modifier = Modifier
@@ -277,14 +291,6 @@ fun TaskCreateScreen(
         }
 
     }
-//    if(dateState){
-//        DatePickerWithDialog(
-//            onSelected = {
-//                viewModel.dateSelectedState.value.text = it
-//                viewModel.dateState.value = false
-//            }
-//        )
-//    }
 }
 @RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
@@ -305,20 +311,9 @@ fun DatePickerWithDialog(
     Column(
 
     ) {
-        Text(
-            modifier = Modifier
-
-                .clickable(onClick = {
-                    showDialog = true
-                }),
-            fontFamily = FontFamily.Monospace,
-            fontWeight = FontWeight.Light,
-            style = MaterialTheme.typography.bodyLarge,
-            color = Color.Magenta,
-            text = dateToString,
-            textAlign = TextAlign.Center,
-        )
-
+        IconButton(onClick = {  showDialog = true }) {
+            Icon(imageVector = Icons.Filled.DateRange, contentDescription ="" )
+        }
         if (showDialog) {
             DatePickerDialog(
                 onDismissRequest = { showDialog = false },

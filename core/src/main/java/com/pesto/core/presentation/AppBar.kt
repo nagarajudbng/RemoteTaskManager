@@ -53,7 +53,8 @@ fun AppBar(
     backClick: () -> Unit,
     filter:(String) ->Unit,
     isSearchEnable: Boolean,
-    isFilterEnable:Boolean
+    isFilterEnable:Boolean,
+    isProfileEnable:Boolean
 ) {
         TopAppBar(
             modifier = modifier
@@ -63,30 +64,32 @@ fun AppBar(
                 Box(modifier = Modifier
                     .fillMaxHeight()
                     .padding(start = 5.dp)) {
-                    Icon(
-                        imageVector = Icons.Filled.AccountBox,
-                        tint = Color.White,
-                        contentDescription = null,
-                        modifier = Modifier
-                            .size(50.dp)
-                            .clip(CircleShape)
-                            .fillMaxWidth()
-                            .align(Alignment.CenterStart)
-                            .clickable {
-                            }
-                            .border(
-                                BorderStroke(
-                                    6.dp,
-                                    Brush.sweepGradient(
-                                        listOf(
-                                            Color(0xFF76C868),
-                                            Color(0xFF76C868)
+                    if(isProfileEnable) {
+                        Icon(
+                            imageVector = Icons.Filled.AccountBox,
+                            tint = Color.White,
+                            contentDescription = null,
+                            modifier = Modifier
+                                .size(50.dp)
+                                .clip(CircleShape)
+                                .fillMaxWidth()
+                                .align(Alignment.CenterStart)
+                                .clickable {
+                                }
+                                .border(
+                                    BorderStroke(
+                                        6.dp,
+                                        Brush.sweepGradient(
+                                            listOf(
+                                                Color(0xFF76C868),
+                                                Color(0xFF76C868)
+                                            )
                                         )
-                                    )
-                                ),
-                                CircleShape
-                            )
-                    )
+                                    ),
+                                    CircleShape
+                                )
+                        )
+                    }
                 }
             },
             title = {
@@ -162,6 +165,7 @@ fun HomeAppBarPreview() {
         backClick = { },
         filter = {},
         isSearchEnable = false,
-        isFilterEnable = false
+        isFilterEnable = false,
+        isProfileEnable = false
     )
 }

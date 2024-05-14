@@ -29,6 +29,7 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.toSize
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.ui.graphics.Color
 import com.pesto.core.domain.states.FieldStatus
@@ -70,6 +71,7 @@ fun CustomDropDownMenu(
 //                viewModel.onEvent(CreateMenuEvent.EnteredSubCategory(it))
             },
             modifier = modifier
+                .fillMaxWidth()
                 .clickable {
                     mExpanded = true
                 }
@@ -78,21 +80,28 @@ fun CustomDropDownMenu(
                     // the DropDown the same width
                     mTextFieldSize = coordinates.size.toSize()
                 },
-            colors = TextFieldDefaults.textFieldColors(
-                disabledTextColor = Color.Black,
-                disabledLabelColor =  Color.Black,
-                disabledTrailingIconColor = Color.Black
+            colors = OutlinedTextFieldDefaults.colors(
+                disabledTextColor = MaterialTheme.colorScheme.onSurface,
+                disabledContainerColor = Color.Transparent,
+                disabledBorderColor = MaterialTheme.colorScheme.outline,
+                disabledLeadingIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                disabledTrailingIconColor = MaterialTheme.colorScheme.onSurface,
+                disabledLabelColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                disabledPlaceholderColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                disabledSupportingTextColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                disabledPrefixColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                disabledSuffixColor = MaterialTheme.colorScheme.onSurfaceVariant
             ),
             isError = errorStatus == FieldStatus.FieldEmpty,
-//            supportingText = {
-//                if (error == FieldStatus.FieldEmpty) {
-//                    Text(
-//                        modifier = Modifier.fillMaxWidth(),
-//                        text = "Field Selection Required",
-//                        color = MaterialTheme.colorScheme.error
-//                    )
-//                }
-//            },
+            supportingText = {
+                if (errorStatus == FieldStatus.FieldEmpty) {
+                    Text(
+                        modifier = Modifier.fillMaxWidth(),
+                        text = "Field Selection Required",
+                        color = MaterialTheme.colorScheme.error
+                    )
+                }
+            },
             trailingIcon = {
                 Icon(icon, "contentDescription",
                     Modifier.clickable { mExpanded = !mExpanded })

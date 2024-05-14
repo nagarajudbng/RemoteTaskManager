@@ -25,7 +25,7 @@ class TaskCreateUseCase @Inject constructor(
         taskResult.status =
             if (task.status.isEmpty() || task.status == "Select") FieldStatus.FieldEmpty else FieldStatus.FieldFilled
          taskResult.dueDate =
-            if (task.dueDate.isEmpty() || task.dueDate == "Choose Date") FieldStatus.FieldEmpty else FieldStatus.FieldFilled
+            if (task.dueDate.isEmpty() || task.dueDate == "Due date") FieldStatus.FieldEmpty else FieldStatus.FieldFilled
         taskResult.isValid =
             !(taskResult.title == FieldStatus.FieldEmpty || taskResult.description == FieldStatus.FieldEmpty || taskResult.dueDate==FieldStatus.FieldEmpty)
 

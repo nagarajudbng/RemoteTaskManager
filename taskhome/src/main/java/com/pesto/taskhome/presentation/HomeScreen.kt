@@ -20,6 +20,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
@@ -114,7 +115,7 @@ fun HomeScreen(
     ) {
         Column(
             modifier = Modifier
-                .fillMaxSize()
+                .fillMaxSize().background(Color.LightGray)
                 .padding(
                     top = it.calculateTopPadding(),
                     bottom = it.calculateBottomPadding()
@@ -138,6 +139,7 @@ fun TopBarView(viewModel: HomeTaskViewModel) {
             backClick = {},
             isSearchEnable = true,
             isFilterEnable = true,
+            isProfileEnable = true,
             filter = {
                 viewModel.onSearchEvent(SearchEvent.OnFilter(it))
             }
@@ -178,6 +180,7 @@ fun ShowTodoList(viewModel: HomeTaskViewModel) {
         LazyColumn(
             modifier = Modifier.fillMaxWidth(),
             contentPadding = PaddingValues(16.dp)
+
         )
         {
 
@@ -220,7 +223,12 @@ fun ListItem(
             .padding(2.dp)
             .fillMaxWidth()
             .height(80.dp),
-        shape = MaterialTheme.shapes.medium,
+        colors = CardDefaults.cardColors(
+            containerColor = Color.White //Card background color
+//            contentColor = Color.White  //Card content color,e.g.text
+        )
+//            .background(Color.White)
+//        shape = MaterialTheme.shapes.medium,
     ) {
         Row(
             modifier = Modifier.fillMaxSize()
