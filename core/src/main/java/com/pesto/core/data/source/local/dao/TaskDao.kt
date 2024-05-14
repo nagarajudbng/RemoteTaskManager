@@ -25,4 +25,7 @@ interface TaskDao {
     @Query("SELECT * FROM TaskEntity WHERE title LIKE '%' || :searchQuery || '%'")
      fun search(searchQuery:String): Flow<List<TaskEntity>>
 
+    @Query("SELECT * FROM TaskEntity WHERE status LIKE '%' || :filterQuery || '%'")
+     fun filter(filterQuery:String): Flow<List<TaskEntity>>
+
 }

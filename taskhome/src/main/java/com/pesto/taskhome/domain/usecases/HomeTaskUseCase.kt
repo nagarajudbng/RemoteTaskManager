@@ -40,6 +40,19 @@ class HomeTaskUseCase @Inject constructor(
              }
          }
     }
+    suspend fun filter(query: String): Flow<List<Task>> {
+        return localRepositoryImpl.filter(query).map { taskEntityList ->
+            taskEntityList.map { taskEntity ->
+                Task(
+                    id=taskEntity.id,
+                    title = taskEntity.title,
+                    description = taskEntity.description,
+                    status = taskEntity.status,
+                    dueDate = taskEntity.dueDate
+                )
+            }
+        }
+    }
     suspend fun delete(task: Task) {
         localRepositoryImpl.delete(task.toUpdateTaskEntity())
         remoteRepositoryImpl.delete(task.toUpdateTaskEntity())

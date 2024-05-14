@@ -65,7 +65,13 @@ class HomeTaskViewModel @Inject constructor(
             is SearchEvent.OnFocusChange ->{
                 focusState.value = event.focus
             }
-
+            is SearchEvent.OnFilter ->{
+                viewModelScope.launch {
+                    homeTodoUseCase.filter(event.query).flowOn(Dispatchers.IO).collect{
+                        todoList.value = it
+                    }
+                }
+            }
             is SearchEvent.OnClearPressed ->{
                 _searchQuery.value=""
                 _topBarState.value = false

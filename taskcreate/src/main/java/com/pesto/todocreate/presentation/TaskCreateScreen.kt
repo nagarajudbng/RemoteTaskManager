@@ -116,10 +116,11 @@ fun TaskCreateScreen(
         topBar = {
             AppBar(
                 title = stringResource(id = R.string.create_task_title),
-                searchClick = {
-                },
+                searchClick = {},
                 backClick = {},
-                isSearchEnable = false
+                isSearchEnable = false,
+                isFilterEnable = false,
+                filter = {}
             )
         }
     ) {

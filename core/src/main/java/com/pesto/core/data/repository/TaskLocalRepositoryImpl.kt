@@ -32,5 +32,9 @@ class TaskLocalRepositoryImpl @Inject constructor(
         val taskDao = appDatabase.taskDao
         return  taskDao.search(query)
     }
+    override suspend fun filter(query: String): Flow<List<TaskEntity>> {
+        val taskDao = appDatabase.taskDao
+        return  taskDao.filter(query)
+    }
 
 }

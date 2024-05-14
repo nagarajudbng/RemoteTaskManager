@@ -2,6 +2,7 @@ package com.pesto.core.presentation
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -29,10 +30,14 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.filled.AccountBox
+import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.vectorResource
+import com.pesto.core.R
 
 
 // Created by Nagaraju Deshetty on 07/05/24.
@@ -46,14 +51,18 @@ fun AppBar(
     modifier: Modifier = Modifier,
     searchClick: () -> Unit,
     backClick: () -> Unit,
-    isSearchEnable: Boolean
+    filter:(String) ->Unit,
+    isSearchEnable: Boolean,
+    isFilterEnable:Boolean
 ) {
         TopAppBar(
             modifier = modifier
                 .heightIn(searchBoxHeight.dp),
 
             navigationIcon = {
-                Box(modifier = Modifier.fillMaxHeight().padding(start = 5.dp)) {
+                Box(modifier = Modifier
+                    .fillMaxHeight()
+                    .padding(start = 5.dp)) {
                     Icon(
                         imageVector = Icons.Filled.AccountBox,
                         tint = Color.White,
@@ -70,10 +79,7 @@ fun AppBar(
                                     6.dp,
                                     Brush.sweepGradient(
                                         listOf(
-//                                            Color(0xFF9575CD),
                                             Color(0xFF76C868),
-//                                            Color(0xFFE57373),
-//                                            Color(0xFFFFB74D),
                                             Color(0xFF76C868)
                                         )
                                     )
@@ -85,7 +91,9 @@ fun AppBar(
             },
             title = {
                 Box(
-                    modifier = Modifier.fillMaxSize().padding(start = 10.dp),
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(start = 10.dp),
                     contentAlignment = Alignment.CenterStart
                 ) {
                     Text(
@@ -104,16 +112,37 @@ fun AppBar(
 
             colors = TopAppBarDefaults.smallTopAppBarColors(Color(0xFF598626)),
             actions = {
-                if(isSearchEnable) {
-                    Box(
-                        modifier = Modifier.fillMaxHeight(),
-                        contentAlignment = Alignment.CenterEnd
-                    ) {
-                        IconButton(onClick = searchClick) {
-                            Icon(
-                                imageVector = Icons.Filled.Search,
-                                contentDescription = "",
-                                tint = White
+                Row(
+                    modifier=Modifier.fillMaxHeight().padding(end = 10.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                )
+                {
+
+                    if (isSearchEnable) {
+                        Box(
+                            modifier = Modifier
+                        ) {
+                            IconButton(onClick = searchClick) {
+                                Icon(
+                                    imageVector = Icons.Filled.Search,
+                                    contentDescription = "",
+                                    tint = White
+                                )
+                            }
+                        }
+                    }
+                    if(isFilterEnable){
+                        Box(
+                            modifier = Modifier
+                        ) {
+                            PopUpMenuButton(
+                                modifier = Modifier.align(Alignment.Center),
+                                options = popUpMenu,
+                                imageVector = ImageVector.vectorResource(id = R.drawable.outline_filter_list_24),
+                                action = {
+                                    filter(it)
+                                },
+                                iconTint = Color.Black
                             )
                         }
                     }
@@ -131,6 +160,8 @@ fun HomeAppBarPreview() {
         title = "Romantic Comedy",
         searchClick = { },
         backClick = { },
-        isSearchEnable = false
+        filter = {},
+        isSearchEnable = false,
+        isFilterEnable = false
     )
 }

@@ -137,6 +137,10 @@ fun TopBarView(viewModel: HomeTaskViewModel) {
             },
             backClick = {},
             isSearchEnable = true,
+            isFilterEnable = true,
+            filter = {
+                viewModel.onSearchEvent(SearchEvent.OnFilter(it))
+            }
         )
     } else {
         SearchBar(
@@ -331,7 +335,7 @@ fun ListItem(
                         action = {
                             action(task, it)
                         },
-                                iconTint = Color.Black
+                        iconTint = Color.Black
                     )
 //                    IconButton(onClick = {
 //

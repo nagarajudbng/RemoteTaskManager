@@ -14,4 +14,5 @@ interface TaskRepository {
     suspend fun update(task: TaskEntity)
     suspend fun getTaskList(): Flow<List<TaskEntity>>
     suspend fun searchQuery(query: String): Flow<List<TaskEntity>>
+    suspend fun filter(query: String): Flow<List<TaskEntity>>
 }
