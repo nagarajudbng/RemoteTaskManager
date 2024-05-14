@@ -29,9 +29,10 @@ import androidx.compose.ui.unit.dp
 // Created by Nagaraju on 15/05/24.
 
 var popUpMenu = listOf(
-    PopUpMenuItem(id = "1", label = "Done"),
-    PopUpMenuItem(id = "2", label = "To Do"),
-    PopUpMenuItem(id = "3", label = "In Progress"),
+    PopUpMenuItem(id = "1", label = "All"),
+    PopUpMenuItem(id = "2", label = "Done"),
+    PopUpMenuItem(id = "3", label = "To Do"),
+    PopUpMenuItem(id = "4", label = "In Progress"),
 )
 data class PopUpMenuItem(
     val id: String,

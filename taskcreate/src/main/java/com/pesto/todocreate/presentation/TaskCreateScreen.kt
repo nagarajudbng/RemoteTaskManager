@@ -121,7 +121,8 @@ fun TaskCreateScreen(
                 isSearchEnable = false,
                 isFilterEnable = false,
                 isProfileEnable = false,
-                filter = {}
+                filter = {},
+                gotoProfile = {}
 
             )
         }

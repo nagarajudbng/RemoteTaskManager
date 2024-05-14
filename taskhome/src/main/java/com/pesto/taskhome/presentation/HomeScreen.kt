@@ -98,7 +98,10 @@ fun HomeScreen(
     }
     Scaffold(
         topBar = {
-            TopBarView(viewModel)
+            TopBarView(onNavigation = {
+                                      onNavigation(it)
+            },
+                viewModel)
         },
 
         floatingActionButton = {
@@ -128,7 +131,10 @@ fun HomeScreen(
 
 
 @Composable
-fun TopBarView(viewModel: HomeTaskViewModel) {
+fun TopBarView(
+    onNavigation:(String)->Unit,
+    viewModel: HomeTaskViewModel
+) {
     val showSearch = viewModel.topBarState.value
     if (!showSearch) {
         AppBar(
@@ -142,6 +148,9 @@ fun TopBarView(viewModel: HomeTaskViewModel) {
             isProfileEnable = true,
             filter = {
                 viewModel.onSearchEvent(SearchEvent.OnFilter(it))
+            },
+            gotoProfile = {
+                onNavigation(it)
             }
         )
     } else {

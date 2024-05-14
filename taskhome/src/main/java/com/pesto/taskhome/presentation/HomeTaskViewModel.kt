@@ -67,8 +67,12 @@ class HomeTaskViewModel @Inject constructor(
             }
             is SearchEvent.OnFilter ->{
                 viewModelScope.launch {
-                    homeTodoUseCase.filter(event.query).flowOn(Dispatchers.IO).collect{
-                        todoList.value = it
+                    if(event.query == "All"){
+                        getTaskList()
+                    } else {
+                        homeTodoUseCase.filter(event.query).flowOn(Dispatchers.IO).collect {
+                            todoList.value = it
+                        }
                     }
                 }
             }

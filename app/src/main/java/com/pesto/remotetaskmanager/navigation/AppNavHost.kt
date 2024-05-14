@@ -14,6 +14,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.pesto.taskhome.presentation.HomeScreen
+import com.pesto.taskhome.presentation.ProfileScreen
 import com.pesto.todocreate.presentation.TaskCreateScreen
 import kotlinx.coroutines.launch
 
@@ -42,7 +43,11 @@ fun AppNavHost(
                 composable(NavigationItem.HOME.route) {
                     HomeScreen(
                         onNavigation ={
-                            navController.navigate(NavigationItem.ADDTASK.route)
+                            if(it == "Profile"){
+                                navController.navigate(NavigationItem.PROFILE.route)
+                            } else {
+                                navController.navigate(NavigationItem.ADDTASK.route)
+                            }
                         },
                         onSnackBarMessage={
                             scope.launch {
@@ -60,6 +65,13 @@ fun AppNavHost(
                             scope.launch {
                                 snackBarHostState.showSnackbar(it)
                             }
+                        }
+                    )
+                }
+                composable(NavigationItem.PROFILE.route) {
+                    ProfileScreen(
+                        onNavigation = {
+                            navController.popBackStack()
                         }
                     )
                 }

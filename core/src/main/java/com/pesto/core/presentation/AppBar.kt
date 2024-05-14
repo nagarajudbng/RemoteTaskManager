@@ -54,7 +54,8 @@ fun AppBar(
     filter:(String) ->Unit,
     isSearchEnable: Boolean,
     isFilterEnable:Boolean,
-    isProfileEnable:Boolean
+    isProfileEnable:Boolean,
+    gotoProfile:(String)->Unit
 ) {
         TopAppBar(
             modifier = modifier
@@ -66,6 +67,7 @@ fun AppBar(
                     .padding(start = 5.dp)) {
                     if(isProfileEnable) {
                         Icon(
+
                             imageVector = Icons.Filled.AccountBox,
                             tint = Color.White,
                             contentDescription = null,
@@ -75,6 +77,7 @@ fun AppBar(
                                 .fillMaxWidth()
                                 .align(Alignment.CenterStart)
                                 .clickable {
+                                    gotoProfile("Profile")
                                 }
                                 .border(
                                     BorderStroke(
@@ -166,6 +169,7 @@ fun HomeAppBarPreview() {
         filter = {},
         isSearchEnable = false,
         isFilterEnable = false,
-        isProfileEnable = false
+        isProfileEnable = false,
+        gotoProfile = {}
     )
 }
