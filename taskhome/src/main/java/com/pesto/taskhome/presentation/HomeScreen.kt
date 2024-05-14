@@ -7,11 +7,13 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
@@ -46,6 +48,8 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.toUpperCase
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -216,45 +220,89 @@ fun ListItem(
     ) {
         Row(
             modifier = Modifier.fillMaxSize()
+
         ) {
 
             Box(
                 modifier = Modifier
+                    .fillMaxSize()
                     .weight(1f)
-                    .padding(start = 10.dp)
+
                     .align(Alignment.CenterVertically)
             ) {
-                Column(
 
-                ) {
-                    Text(
-                        modifier = Modifier,
-                        text = task.title,
-                        fontFamily = FontFamily.Monospace,
-                        fontWeight = FontWeight.Light,
-                        style = TextStyle(
-                            fontSize = 16.sp,
-                            shadow = Shadow(
-                                color = Color.Black, offset = Offset(-.0f, 0.0f), blurRadius = 0f
+
+                    Column(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(top = 10.dp),
+
+                    ) {
+                        Text(
+                            modifier = Modifier.padding(start = 10.dp),
+                            text = task.title.toUpperCase(),
+                            maxLines = 1,
+                            fontFamily = FontFamily.Monospace,
+                            fontWeight = FontWeight.Light,
+                            style = TextStyle(
+                                fontSize = 16.sp,
+                                shadow = Shadow(
+                                    color = Color.Black,
+                                    offset = Offset(-.0f, 0.0f),
+                                    blurRadius = 0f
+                                )
+                            )
+
+                        )
+                        Spacer(modifier = Modifier.height(5.dp))
+                        Text(
+                            modifier = Modifier.padding(start = 10.dp),
+                            text = task.description,
+                            maxLines = 1,
+                            color = Color.Black,
+                            fontFamily = FontFamily.Monospace,
+                            fontWeight = FontWeight.Light,
+                            style = TextStyle(
+                                fontSize = 12.sp,
+                                shadow = Shadow(
+                                    color = Color.LightGray,
+                                    offset = Offset(0.0f, 0.0f),
+                                    blurRadius = 0f
+                                )
                             )
                         )
 
-                    )
-                    Text(
-                        modifier = Modifier,
-                        text = task.description,
-                        fontFamily = FontFamily.Monospace,
-                        fontWeight = FontWeight.Light,
-                        style = TextStyle(
-                            fontSize = 12.sp,
-                            shadow = Shadow(
-                                color = Color.Black, offset = Offset(0.0f, 0.0f), blurRadius = 0f
-                            )
+                        Row(
+                            modifier = Modifier.fillMaxSize(),
+                            verticalAlignment = Alignment.Bottom,
+                            horizontalArrangement = Arrangement.Start
                         )
-                    )
+                        {
+
+
+                            Text(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .background(Color(0xFF9FCA6D)),
+                                textAlign = TextAlign.Start,
+                                text = " Due Date : ${task.dueDate}",
+                                color = Color.White,
+                                fontFamily = FontFamily.Monospace,
+                                fontWeight = FontWeight.Light,
+                                style = TextStyle(
+                                    fontSize = 8.sp,
+                                    shadow = Shadow(
+                                        color = Color.Black,
+                                        offset = Offset(0.0f, 0.0f),
+                                        blurRadius = 0f
+                                    )
+                                )
+                            )
+                        }
+
                 }
             }
-            Box(modifier = Modifier.weight(1f)) {
+            Box(modifier = Modifier.weight(1f).fillMaxSize()) {
                 Row(
                     modifier = Modifier
                         .fillMaxSize(),
@@ -292,6 +340,29 @@ fun ListItem(
 //                    }
                 }
 
+
+
+                    Text(
+                        modifier = Modifier
+                            .wrapContentHeight()
+                            .fillMaxWidth()
+                            .align(Alignment.BottomCenter)
+                            .background(Color(0xFF9FCA6D)),
+
+                        textAlign = TextAlign.End,
+                        text = " ",
+                        color = Color.White,
+                        fontFamily = FontFamily.Monospace,
+                        fontWeight = FontWeight.Light,
+                        style = TextStyle(
+                            fontSize = 8.sp,
+                            shadow = Shadow(
+                                color = Color.Black,
+                                offset = Offset(0.0f, 0.0f),
+                                blurRadius = 0f
+                            )
+                        )
+                    )
             }
         }
     }

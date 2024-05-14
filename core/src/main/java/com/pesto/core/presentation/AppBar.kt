@@ -1,5 +1,9 @@
 package com.pesto.core.presentation
 
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.material3.Icon
@@ -23,7 +27,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.filled.AccountBox
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.res.painterResource
 
 
 // Created by Nagaraju Deshetty on 07/05/24.
@@ -43,18 +52,40 @@ fun AppBar(
             modifier = modifier
                 .heightIn(searchBoxHeight.dp),
 
-//            navigationIcon = {
-//                IconButton(onClick = backClick) {
-//                    Icon(
-//                        imageVector = Icons.Filled.ArrowBack,
-//                        contentDescription = "",
-//                        tint = White
-//                    )
-//                }
-//            },
+            navigationIcon = {
+                Box(modifier = Modifier.fillMaxHeight().padding(start = 5.dp)) {
+                    Icon(
+                        imageVector = Icons.Filled.AccountBox,
+                        tint = Color.White,
+                        contentDescription = null,
+                        modifier = Modifier
+                            .size(50.dp)
+                            .clip(CircleShape)
+                            .fillMaxWidth()
+                            .align(Alignment.CenterStart)
+                            .clickable {
+                            }
+                            .border(
+                                BorderStroke(
+                                    6.dp,
+                                    Brush.sweepGradient(
+                                        listOf(
+//                                            Color(0xFF9575CD),
+                                            Color(0xFF76C868),
+//                                            Color(0xFFE57373),
+//                                            Color(0xFFFFB74D),
+                                            Color(0xFF76C868)
+                                        )
+                                    )
+                                ),
+                                CircleShape
+                            )
+                    )
+                }
+            },
             title = {
                 Box(
-                    modifier = Modifier.fillMaxSize(),
+                    modifier = Modifier.fillMaxSize().padding(start = 10.dp),
                     contentAlignment = Alignment.CenterStart
                 ) {
                     Text(
