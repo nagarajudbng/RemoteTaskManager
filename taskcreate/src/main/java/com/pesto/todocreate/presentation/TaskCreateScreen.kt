@@ -1,6 +1,10 @@
 package com.pesto.todocreate.presentation
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -11,17 +15,26 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.DatePicker
+import androidx.compose.material3.DatePickerDialog
+import androidx.compose.material3.DatePickerFormatter
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -30,9 +43,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.Black
 import androidx.compose.ui.graphics.Color.Companion.White
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
@@ -40,6 +55,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -52,6 +68,7 @@ import com.pesto.core.presentation.AppBar
 import com.pesto.core.presentation.CustomDropDownMenu
 import com.pesto.core.presentation.asString
 import com.pesto.todocreate.R
+import com.pesto.todocreate.presentation.util.DateUtils
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 
@@ -61,19 +78,21 @@ import kotlinx.coroutines.flow.collectLatest
 @Composable
 @Preview
 fun TaskCreateScreenPreview() {
-    TaskCreateScreen(
-        onNavigation = {},onSnackBarMessage={
-
-    })
+//    TaskCreateScreen(
+//        onNavigation = {},onSnackBarMessage={
+//
+//    })
 }
+@RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TaskCreateScreen(
     onNavigation: (String) -> Unit,
     onSnackBarMessage:(String)->Unit
 ) {
-    var viewModel = hiltViewModel<TaskViewModel>()
-    var  context = LocalContext.current
+    val viewModel = hiltViewModel<TaskViewModel>()
+    val  context = LocalContext.current
+    val dateState = viewModel.dateState.value
     ProgressDialogBox(viewModel = viewModel)
     LaunchedEffect(key1 = true) {
         viewModel.eventFlow.collectLatest { event ->
@@ -196,6 +215,44 @@ fun TaskCreateScreen(
                     viewModel.onEvent(TaskEvent.EnteredStatus(it))
                 }
             )
+            Spacer(modifier = Modifier.height(16.dp))
+            Row(modifier = Modifier
+            ){
+
+                Text(
+                    text = "Due Date",
+                    fontFamily = FontFamily.Monospace,
+                    fontWeight = FontWeight.Light,
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = MaterialTheme.colorScheme.onSurface,
+                )
+                Spacer(modifier = Modifier.width(16.dp))
+                DatePickerWithDialog(
+                    onSelected = {
+                    viewModel.dateSelectedState.value.text = it
+                })
+                if (viewModel.dateSelectedState.value.error  == FieldStatus.FieldEmpty) {
+                    Text(
+                        modifier = Modifier.fillMaxWidth(),
+                        text = "Due Date Required",
+                        color = MaterialTheme.colorScheme.error
+                    )
+                }
+//                IconButton(onClick = {
+//                    viewModel.dateState.value = true
+//                }) {
+//                    Icon(imageVector = Icons.Filled.DateRange, contentDescription = "")
+//                }
+//
+//                Text(
+//                    text = viewModel.dateSelectedState.value.text,
+//                    fontFamily = FontFamily.Monospace,
+//                    fontWeight = FontWeight.Light,
+//                    style = MaterialTheme.typography.bodyLarge,
+//                    color = MaterialTheme.colorScheme.onSurface,
+//                )
+            }
+            Spacer(modifier = Modifier.height(16.dp))
             Row(
                 modifier = Modifier
                     .fillMaxSize(),
@@ -203,7 +260,8 @@ fun TaskCreateScreen(
                 verticalAlignment = Alignment.Bottom
             ) {
                 Button(
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier
+                        .fillMaxWidth()
                         .padding(bottom = 16.dp),
                     onClick = {
                         viewModel.onEvent(TaskEvent.AddTask)
@@ -217,6 +275,76 @@ fun TaskCreateScreen(
             }
         }
 
+    }
+//    if(dateState){
+//        DatePickerWithDialog(
+//            onSelected = {
+//                viewModel.dateSelectedState.value.text = it
+//                viewModel.dateState.value = false
+//            }
+//        )
+//    }
+}
+@RequiresApi(Build.VERSION_CODES.O)
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun DatePickerWithDialog(
+    onSelected:(String)->Unit,
+    modifier: Modifier = Modifier
+) {
+    val dateState = rememberDatePickerState()
+    val millisToLocalDate = dateState.selectedDateMillis?.let {
+        DateUtils.convertMillisToLocalDate(it)
+    }
+    val dateToString = millisToLocalDate?.let {
+        DateUtils.dateToString(millisToLocalDate)
+    } ?: "Choose Date"
+
+    var showDialog by remember { mutableStateOf(false) }
+    Column(
+
+    ) {
+        Text(
+            modifier = Modifier
+
+                .clickable(onClick = {
+                    showDialog = true
+                }),
+            fontFamily = FontFamily.Monospace,
+            fontWeight = FontWeight.Light,
+            style = MaterialTheme.typography.bodyLarge,
+            color = Color.Magenta,
+            text = dateToString,
+            textAlign = TextAlign.Center,
+        )
+
+        if (showDialog) {
+            DatePickerDialog(
+                onDismissRequest = { showDialog = false },
+                confirmButton = {
+                    Button(
+                        onClick = {
+                            showDialog = false
+                            onSelected(dateToString)
+                        }
+                    ) {
+                        Text(text = "OK")
+                    }
+                },
+                dismissButton = {
+                    Button(
+                        onClick = { showDialog = false }
+                    ) {
+                        Text(text = "Cancel")
+                    }
+                }
+            ) {
+                DatePicker(
+                    state = dateState,
+                    showModeToggle = true
+                )
+            }
+        }
     }
 }
 
