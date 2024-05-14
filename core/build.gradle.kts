@@ -69,4 +69,6 @@ dependencies {
     implementation(libs.hilt.navigation.compose)
 
 
+    implementation(libs.androidx.work.runtime.ktx)
+    implementation(libs.firebase.database)
 }

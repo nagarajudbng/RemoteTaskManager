@@ -5,8 +5,9 @@ import com.pesto.core.data.source.local.entity.TaskEntity
 import com.pesto.core.domain.repository.RowId
 import com.pesto.core.domain.repository.TaskRepository
 import kotlinx.coroutines.flow.Flow
+import javax.inject.Inject
 
-class TaskRepositoryImpl(
+class TaskLocalRepositoryImpl @Inject constructor(
     private var appDatabase: AppDatabase
 ):TaskRepository {
     override suspend fun insert(task: TaskEntity): RowId {

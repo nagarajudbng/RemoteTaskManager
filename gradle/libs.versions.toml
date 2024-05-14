@@ -21,9 +21,15 @@ hilt-plugin = "2.44.2"
 hilt-navigation-compose ="1.0.0-beta01"
 kotlinx-coroutines-test="1.5.2"
 appsearch = "1.1.0-alpha03"
+workRuntimeKtx = "2.9.0"
+googleGmsGoogleServices = "4.4.1"
+firebaseDatabase = "21.0.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+androidx-work-gcm = { module = "androidx.work:work-gcm", version.ref = "workRuntimeKtx" }
+androidx-work-runtime-ktx = { module = "androidx.work:work-runtime-ktx", version.ref = "workRuntimeKtx" }
+androidx-work-rxjava2 = { module = "androidx.work:work-rxjava2", version.ref = "workRuntimeKtx" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
@@ -61,6 +67,7 @@ kotlinx-coroutines-test= { group = "org.jetbrains.kotlinx", name = "kotlinx-coro
 appsearch = { group = "androidx.appsearch:appsearch", name = "appsearch", version.ref = "appsearch" }
 appsearch-compiler = { group = "androidx.appsearch:appsearch", name = "appsearch-compiler", version.ref = "appsearch" }
 appsearch-local-storage = { group = "androidx.appsearch:appsearch", name = "appsearch-local-storage", version.ref = "appsearch" }
+firebase-database = { group = "com.google.firebase", name = "firebase-database", version.ref = "firebaseDatabase" }
 
 
 
@@ -69,4 +76,5 @@ android-application = { id = "com.android.application", version.ref = "agp" }
 jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 android-library = { id = "com.android.library", version.ref = "agp" }
 hilt= { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
+google-gms-google-services = { id = "com.google.gms.google-services", version.ref = "googleGmsGoogleServices" }
 

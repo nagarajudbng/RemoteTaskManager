@@ -1,5 +1,6 @@
 package com.pesto.core.data.mapper
 
+import com.pesto.core.data.dto.TaskDB
 import com.pesto.core.data.dto.TaskDto
 import com.pesto.core.data.source.local.entity.TaskEntity
 import com.pesto.core.domain.model.Task
@@ -14,6 +15,14 @@ fun TaskEntity.toTask():Task{
         description = description,
         status = status
     )
+}
+
+fun TaskEntity.toTaskDB(id:String):TaskDB{
+    return TaskDB(
+        id = id,
+    title  = title,
+    description = description,
+    status = status)
 }
 
 fun Task.toTaskEntity():TaskEntity{

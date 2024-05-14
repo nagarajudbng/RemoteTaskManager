@@ -12,6 +12,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.rememberNavController
+import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.Firebase
 import com.pesto.remotetaskmanager.ui.theme.RemoteTaskManagerTheme
 import com.single.point.navigation.AppNavHost
 import dagger.hilt.android.AndroidEntryPoint
@@ -24,6 +26,8 @@ class MainActivity : ComponentActivity() {
             RemoteTaskManagerTheme {
                   val navController = rememberNavController()
                     AppNavHost(navController = navController)
+
+
             }
         }
     }

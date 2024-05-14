@@ -1,6 +1,6 @@
 package com.pesto.todocreate
 
-import com.pesto.core.data.repository.TaskRepositoryImpl
+import com.pesto.core.data.repository.TaskLocalRepositoryImpl
 import com.pesto.core.data.source.local.entity.Task
 import com.pesto.todocreate.domain.usecase.TaskCreateUseCase
 import kotlinx.coroutines.runBlocking
@@ -17,7 +17,7 @@ class TaskCreateUseCaseTest {
 
 
     @Mock
-    private lateinit var repository: TaskRepositoryImpl
+    private lateinit var repository: TaskLocalRepositoryImpl
 
     @InjectMocks
     private lateinit var todoCreateUseCase: TaskCreateUseCase

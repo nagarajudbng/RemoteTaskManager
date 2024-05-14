@@ -22,6 +22,12 @@ class TaskViewModel @Inject constructor(
 ) : ViewModel() {
 
 
+    private val _dateState = mutableStateOf(false)
+    val dateState = _dateState
+
+    private val _dateSelectedState = mutableStateOf(StandardTextFieldState())
+    val dateSelectedState = _dateSelectedState
+
     private val _titleState = mutableStateOf(StandardTextFieldState())
     val titleState = _titleState
 

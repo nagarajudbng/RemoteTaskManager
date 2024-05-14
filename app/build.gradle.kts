@@ -4,6 +4,7 @@ plugins {
 
     kotlin("kapt")
     alias(libs.plugins.hilt)
+    alias(libs.plugins.google.gms.google.services)
 }
 
 android {
@@ -64,6 +65,7 @@ dependencies {
     implementation(libs.androidx.material3)
     implementation(project(":taskhome"))
     implementation(project(":taskcreate"))
+    implementation(libs.firebase.database)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -89,6 +91,13 @@ dependencies {
     implementation(libs.hilt.navigation.compose)
     //coroutine test
     testImplementation(libs.kotlinx.coroutines.test)
+
+    implementation (libs.androidx.work.runtime.ktx)
+    implementation (libs.androidx.work.rxjava2)
+
+    // optional - GCMNetworkManager support
+    implementation (libs.androidx.work.gcm)
+
 
 
 }

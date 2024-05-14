@@ -1,7 +1,10 @@
 package com.single.todohome.usecases
 
+import android.util.Log
 import com.pesto.core.data.mapper.toTaskEntity
 import com.pesto.core.data.mapper.toUpdateTaskEntity
+import com.pesto.core.data.repository.TaskLocalRepositoryImpl
+import com.pesto.core.data.repository.TaskRemoteRepositoryImpl
 import com.pesto.core.domain.model.Task
 import com.pesto.core.domain.repository.TaskRepository
 import com.pesto.taskhome.presentation.TaskUpdateEvent
@@ -11,10 +14,11 @@ import javax.inject.Inject
 
 // Created by Nagaraju Deshetty on 07/05/24.
 class HomeTaskUseCase @Inject constructor(
-    private val repository: TaskRepository
+    private var localRepositoryImpl: TaskLocalRepositoryImpl,
+    private var remoteRepositoryImpl: TaskRemoteRepositoryImpl
 ) {
     suspend fun getTaskList(): Flow<List<Task>>{
-        return repository.getTaskList().map { taskEntityList ->
+        return localRepositoryImpl.getTaskList().map { taskEntityList ->
             taskEntityList.map { taskEntity ->
                 Task(
                     id = taskEntity.id,
@@ -27,7 +31,7 @@ class HomeTaskUseCase @Inject constructor(
     }
 
      suspend fun searchQuery(query: String): Flow<List<Task>> {
-         return repository.searchQuery(query).map { taskEntityList ->
+         return localRepositoryImpl.searchQuery(query).map { taskEntityList ->
              taskEntityList.map { taskEntity ->
                  Task(
                      id=taskEntity.id,
@@ -39,10 +43,12 @@ class HomeTaskUseCase @Inject constructor(
          }
     }
     suspend fun delete(task: Task) {
-        repository.delete(task.toUpdateTaskEntity())
+        localRepositoryImpl.delete(task.toUpdateTaskEntity())
+        remoteRepositoryImpl.delete(task.toUpdateTaskEntity())
     }
 
     suspend fun update(task: Task) {
-        repository.update(task.toUpdateTaskEntity())
+        localRepositoryImpl.update(task.toUpdateTaskEntity())
+        remoteRepositoryImpl.update(task.toUpdateTaskEntity())
     }
 }
