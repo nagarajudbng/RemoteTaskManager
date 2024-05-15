@@ -19,7 +19,7 @@ interface TaskDao {
 
     @Update(onConflict = OnConflictStrategy.REPLACE)
     suspend fun update(task: TaskEntity)
-    @Query("SELECT * FROM TaskEntity ORDER BY id ASC")
+    @Query("SELECT * FROM TaskEntity ORDER BY id DESC")
     fun getTaskList(): Flow<List<TaskEntity>>
 
     @Query("SELECT * FROM TaskEntity WHERE title LIKE '%' || :searchQuery || '%'")
