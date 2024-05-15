@@ -57,6 +57,7 @@ class HomeTaskViewModel @Inject constructor(
             }
             is SearchEvent.OnSearchStart ->{
                 viewModelScope.launch {
+                    _searchQuery.value = event.query
                     homeTodoUseCase.searchQuery(event.query).flowOn(Dispatchers.IO).collect{
                         todoList.value = it
                     }
@@ -87,7 +88,7 @@ class HomeTaskViewModel @Inject constructor(
      fun getTaskList() {
          viewModelScope.launch {
               homeTodoUseCase.getTaskList().flowOn(Dispatchers.IO).collect{
-                  todoList.value = it.reversed()
+                  todoList.value = it
               }
          }
 
@@ -109,7 +110,15 @@ class HomeTaskViewModel @Inject constructor(
                    } else {
                        homeTodoUseCase.update(task)
                    }
-                   getTaskList()
+                   if(_searchQuery.value.isNotBlank()){
+                       homeTodoUseCase.searchQuery(_searchQuery.value).flowOn(Dispatchers.IO).collect{
+                           todoList.value = it
+                       }
+                   }
+                   else {
+//                       getTaskList()
+                       todoList.value = listOf()
+                   }
                }
            }
 
