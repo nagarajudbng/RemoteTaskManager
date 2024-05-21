@@ -126,9 +126,9 @@ fun SearchBar(
             trailingIcon = {
                 IconButton(
                     onClick = {
-                        onSearchTextEntered("")
+//                        onSearchTextEntered("")
                         onClearPressed()
-                        onBackPressed()
+//                        onBackPressed()
                     }
                 ) {
 

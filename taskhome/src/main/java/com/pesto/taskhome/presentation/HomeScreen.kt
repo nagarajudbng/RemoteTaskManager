@@ -1,6 +1,7 @@
 package com.pesto.taskhome.presentation
 
 import android.media.Image
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -118,7 +119,7 @@ fun HomeScreen(
     ) {
         Column(
             modifier = Modifier
-                .fillMaxSize().background(Color.LightGray)
+                .fillMaxSize().background(Color(0xFFE9E9E9))
                 .padding(
                     top = it.calculateTopPadding(),
                     bottom = it.calculateBottomPadding()
@@ -157,19 +158,25 @@ fun TopBarView(
         SearchBar(
             Modifier.padding(horizontal = 16.dp),
             onSearchTextEntered = {
+                Log.d("Search","onSearchTextEntered")
+
                 viewModel.onSearchEvent(SearchEvent.OnSearchQuery(it))
             },
             onSearchStart = {
+                Log.d("Search","onSearchStart")
                 viewModel.onSearchEvent(SearchEvent.OnSearchStart(it))
             },
             onFocusChange = {
+                Log.d("Search","onFocusChange")
                 viewModel.onSearchEvent((SearchEvent.OnFocusChange(it)))
             },
             onBackPressed = {
-                viewModel.onSearchEvent(SearchEvent.OnSearchQuery(""))
-                viewModel.onSearchEvent(SearchEvent.OnClearPressed)
+                Log.d("Search","onBackPressed")
+//                viewModel.onSearchEvent(SearchEvent.OnSearchQuery(""))
+//                viewModel.onSearchEvent(SearchEvent.OnClearPressed)
             },
             onClearPressed = {
+                Log.d("Search","onClearPressed")
                 viewModel.onSearchEvent(SearchEvent.OnClearPressed)
             },
             viewModel.searchQuery.value,
@@ -182,7 +189,7 @@ fun TopBarView(
 fun ShowTodoList(viewModel: HomeTaskViewModel) {
 
     val todoList = viewModel.todoList.value
-
+    Log.d("Search ShowTodoList","ShowTodoList "+todoList.size)
 
     if (todoList.isNotEmpty()) {
 

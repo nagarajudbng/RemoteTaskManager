@@ -1,5 +1,6 @@
 package com.pesto.taskhome.presentation
 
+import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -11,6 +12,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -18,12 +20,12 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeTaskViewModel @Inject constructor(
     private var homeTodoUseCase: HomeTaskUseCase
-):ViewModel(){
+):ViewModel() {
 
     private val _eventFlow = MutableSharedFlow<UiEvent>()
     val eventFlow = _eventFlow.asSharedFlow()
 
-   private val _todoList = mutableStateOf<List<Task>>(emptyList())
+    private val _todoList = mutableStateOf<List<Task>>(emptyList())
     val todoList = _todoList
 
     private val _searchQuery = mutableStateOf("")
@@ -46,83 +48,91 @@ class HomeTaskViewModel @Inject constructor(
 //        getTaskList()
 //    }
 
-    fun onSearchEvent(event: SearchEvent){
+    fun onSearchEvent(event: SearchEvent) {
 
-        when(event){
-            is SearchEvent.TopSearchSelected ->{
+        when (event) {
+            is SearchEvent.TopSearchSelected -> {
                 _topBarState.value = event.selected
             }
-            is SearchEvent.OnSearchQuery ->{
-                searchQuery.value = event.query
+
+            is SearchEvent.OnSearchQuery -> {
+                _searchQuery.value = event.query
             }
-            is SearchEvent.OnSearchStart ->{
+
+            is SearchEvent.OnSearchStart -> {
                 viewModelScope.launch {
                     _searchQuery.value = event.query
-                    homeTodoUseCase.searchQuery(event.query).flowOn(Dispatchers.IO).collect{
-                        todoList.value = it
-                    }
+                    searchWithQuery(_searchQuery.value)
                 }
             }
-            is SearchEvent.OnFocusChange ->{
+
+            is SearchEvent.OnFocusChange -> {
                 focusState.value = event.focus
             }
-            is SearchEvent.OnFilter ->{
+
+            is SearchEvent.OnFilter -> {
                 viewModelScope.launch {
-                    if(event.query == "All"){
+                    _filterState.value.text = event.query
+                    if (_filterState.value.text == "All") {
                         getTaskList()
                     } else {
-                        homeTodoUseCase.filter(event.query).flowOn(Dispatchers.IO).collect {
+                        homeTodoUseCase.filter(event.query).collect {
                             todoList.value = it
                         }
                     }
                 }
             }
-            is SearchEvent.OnClearPressed ->{
-                _searchQuery.value=""
+
+            is SearchEvent.OnClearPressed -> {
+                _searchQuery.value = ""
                 _topBarState.value = false
                 getTaskList()
             }
 
         }
     }
-     fun getTaskList() {
-         viewModelScope.launch {
-              homeTodoUseCase.getTaskList().flowOn(Dispatchers.IO).collect{
-                  todoList.value = it
-              }
-         }
+
+    fun getTaskList() {
+        viewModelScope.launch {
+            homeTodoUseCase.getTaskList().collect {
+                todoList.value = it
+            }
+        }
 
     }
 
-    fun onEvent(event: TaskUpdateEvent){
-        when(event){
-           is TaskUpdateEvent.EnteredActionUpdate ->{
-               viewModelScope.launch {
-                   val task = Task(
-                       id = event.task.id,
-                       title = event.task.title,
-                       description = event.task.description,
-                       status = event.action,
-                       dueDate = event.task.dueDate
-                   )
-                   if(event.action == "Delete"){
-                       homeTodoUseCase.delete(task)
-                   } else {
-                       homeTodoUseCase.update(task)
-                   }
-                   if(_searchQuery.value.isNotBlank()){
-                       homeTodoUseCase.searchQuery(_searchQuery.value).flowOn(Dispatchers.IO).collect{
-                           todoList.value = it
-                       }
-                   }
-                   else {
-//                       getTaskList()
-                       todoList.value = listOf()
-                   }
-               }
-           }
+    fun onEvent(event: TaskUpdateEvent) {
+        when (event) {
+            is TaskUpdateEvent.EnteredActionUpdate -> {
+                viewModelScope.launch {
+                    val task = Task(
+                        id = event.task.id,
+                        title = event.task.title,
+                        description = event.task.description,
+                        status = event.action,
+                        dueDate = event.task.dueDate
+                    )
+                    Log.d("Search update","update "+event.action)
+                    if (event.action == "Delete") {
+                        homeTodoUseCase.delete(task)
+                    } else {
+                        homeTodoUseCase.update(task)
+                    }
+                    searchWithQuery(_searchQuery.value)
+                }
+            }
 
             else -> {}
+        }
+    }
+
+    private fun searchWithQuery(query: String){
+        viewModelScope.launch {
+            if (_searchQuery.value.isNotBlank()) {
+                homeTodoUseCase.searchQuery(_searchQuery.value).collectLatest { value ->
+                    todoList.value = value
+                }
+            }
         }
     }
 

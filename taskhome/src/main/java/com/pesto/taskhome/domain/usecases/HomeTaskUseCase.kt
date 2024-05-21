@@ -1,5 +1,6 @@
 package com.single.todohome.usecases
 
+import android.util.Log
 import com.pesto.core.data.mapper.toUpdateTaskEntity
 import com.pesto.core.data.repository.TaskLocalRepositoryImpl
 import com.pesto.core.data.repository.TaskRemoteRepositoryImpl
@@ -14,6 +15,7 @@ class HomeTaskUseCase @Inject constructor(
     private var remoteRepositoryImpl: TaskRemoteRepositoryImpl
 ) {
     suspend fun getTaskList(): Flow<List<Task>>{
+        Log.d("Search HomeTaskUseCase","getTaskList")
         return localRepositoryImpl.getTaskList().map { taskEntityList ->
             taskEntityList.map { taskEntity ->
                 Task(
@@ -28,6 +30,7 @@ class HomeTaskUseCase @Inject constructor(
     }
 
      suspend fun searchQuery(query: String): Flow<List<Task>> {
+         Log.d("Search HomeTaskUseCase","searchQuery")
          return localRepositoryImpl.searchQuery(query).map { taskEntityList ->
              taskEntityList.map { taskEntity ->
                  Task(
@@ -41,6 +44,7 @@ class HomeTaskUseCase @Inject constructor(
          }
     }
     suspend fun filter(query: String): Flow<List<Task>> {
+        Log.d("Search HomeTaskUseCase","filter")
         return localRepositoryImpl.filter(query).map { taskEntityList ->
             taskEntityList.map { taskEntity ->
                 Task(
@@ -54,11 +58,13 @@ class HomeTaskUseCase @Inject constructor(
         }
     }
     suspend fun delete(task: Task) {
+        Log.d("Search HomeTaskUseCase","delete")
         localRepositoryImpl.delete(task.toUpdateTaskEntity())
         remoteRepositoryImpl.delete(task.toUpdateTaskEntity())
     }
 
     suspend fun update(task: Task) {
+        Log.d("Search HomeTaskUseCase","update")
         localRepositoryImpl.update(task.toUpdateTaskEntity())
         remoteRepositoryImpl.update(task.toUpdateTaskEntity())
     }

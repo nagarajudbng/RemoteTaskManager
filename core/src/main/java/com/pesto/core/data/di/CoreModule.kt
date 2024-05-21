@@ -1,16 +1,22 @@
 package com.pesto.core.data.di
 
 import android.content.Context
+import android.content.SharedPreferences
 import androidx.room.Room
 import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.pesto.core.data.source.local.AppDatabase
+import com.pesto.core.data.source.local.dao.TaskDao
+import com.pesto.core.data.source.local.dao.UserDao
+import com.pesto.core.data.util.Constants
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import javax.inject.Named
 import javax.inject.Singleton
 
 
@@ -28,13 +34,47 @@ class CoreModule {
             "task"
         ).build()
     }
+    @Provides
+    @Singleton
+    fun provideTaskDao(appDatabase: AppDatabase):TaskDao{
+        return appDatabase.taskDao
+    }
+    @Provides
+    @Singleton
+    fun provideUserDao(appDatabase: AppDatabase):UserDao{
+        return appDatabase.userDao
+    }
+    @Provides
+    @Singleton
+    fun provideSharedPreferences(@ApplicationContext app: Context): SharedPreferences {
+        return app.getSharedPreferences(
+            Constants.SHARED_PREF_NAME,
+            Context.MODE_PRIVATE
+        )
+    }
+
 
     @Provides
     @Singleton
-    fun provideFireBaseDatabase():DatabaseReference{
-        val firebaseDatabase = Firebase.database
+    fun provideFireBaseDatabase(): FirebaseDatabase {
+        var firebaseDatabase = Firebase.database
         firebaseDatabase.setPersistenceEnabled(true)
+        return firebaseDatabase
+    }
+
+    @Provides
+    @Singleton
+    @Named("Task")
+    fun provideTaskDatabaseReference(firebaseDatabase: FirebaseDatabase):DatabaseReference{
         val databaseReference = firebaseDatabase.reference.child("task")
+        databaseReference.keepSynced(true)
+        return databaseReference
+    }
+    @Provides
+    @Singleton
+    @Named("Auth")
+    fun provideAuthenticationReference(firebaseDatabase: FirebaseDatabase):DatabaseReference{
+        val databaseReference = firebaseDatabase.reference.child("auth")
         databaseReference.keepSynced(true)
         return databaseReference
     }

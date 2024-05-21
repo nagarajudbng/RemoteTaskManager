@@ -281,6 +281,7 @@ fun TaskCreateScreen(
                         .padding(bottom = 16.dp),
                     onClick = {
                         viewModel.onEvent(TaskEvent.AddTask)
+//                      viewModel.generateRandomTask()
                     },
                     colors = ButtonDefaults.buttonColors(
                         containerColor = Color(0xFF396803)

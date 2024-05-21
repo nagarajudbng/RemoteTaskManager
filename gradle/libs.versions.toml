@@ -1,4 +1,5 @@
 [versions]
+accompanistCoil = "0.15.0"
 agp = "8.4.0"
 kotlin = "1.9.0"
 coreKtx = "1.13.1"
@@ -26,6 +27,7 @@ googleGmsGoogleServices = "4.4.1"
 firebaseDatabase = "21.0.0"
 
 [libraries]
+accompanist-coil = { module = "com.google.accompanist:accompanist-coil", version.ref = "accompanistCoil" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-work-gcm = { module = "androidx.work:work-gcm", version.ref = "workRuntimeKtx" }
 androidx-work-runtime-ktx = { module = "androidx.work:work-runtime-ktx", version.ref = "workRuntimeKtx" }

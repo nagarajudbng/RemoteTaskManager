@@ -14,6 +14,7 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlin.random.Random
 
 
 @HiltViewModel
@@ -119,9 +120,29 @@ class TaskViewModel @Inject constructor(
 
     }
 
-    suspend fun insert(task: Task) {
+     fun insert(task: Task) {
         viewModelScope.launch {
             taskCreateUseCase.insert(task)
+        }
+    }
+
+    fun generateRandomTask(){
+        val list = listOf(
+            "Hit the gym",
+            "Pay bills",
+            "Meet George",
+            "Buy eggs",
+            "Read a book",
+            "Organize office",
+            "Write in journal",
+            "Meditate (repeat daily)",
+            "Floss teeth (repeat daily)",
+            "Build a morning routine"
+        )
+        val statusList = listOf("To Do","In Progress","Done")
+        for(i in 0..20){
+            val task = Task(title = list.get(Random.nextInt(list.size-1)),description = list.get(Random.nextInt(list.size-1)), status = statusList.get(Random.nextInt(statusList.size)), dueDate = "Thursday, 16 May, 2024")
+            insert(task)
         }
 
     }

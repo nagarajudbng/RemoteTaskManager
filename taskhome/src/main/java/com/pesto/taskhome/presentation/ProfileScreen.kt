@@ -29,6 +29,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.google.accompanist.coil.rememberCoilPainter
 
 //import coil.compose.AsyncImage
 //import coil.compose.rememberAsyncImagePainter
@@ -49,7 +50,7 @@ fun ProfileScreen(
 
         uri?.let {
             //Permissions to read the uri
-            context.contentResolver.takePersistableUriPermission(uri, Intent.FLAG_GRANT_READ_URI_PERMISSION )
+//            context.contentResolver.takePersistableUriPermission(uri, Intent.FLAG_GRANT_READ_URI_PERMISSION )
 
             //userProfile = userProfile.copy(profileImageUri = it)
             viewModel.setProfileImageUri(it.toString())
@@ -76,10 +77,11 @@ fun ProfileScreen(
                 Image(
                     // I replace this line
                     //painter = painterResource(id = R.drawable.ic_launcher_foreground),
-//                    painter = rememberAsyncImagePainter(
-//                        model = state.image    // or ht
-//                    ),
-                    imageVector = Icons.Filled.AccountBox,
+                    painter = rememberCoilPainter(
+                        request = state.image, // or url
+                        fadeIn = true // Optionally, you can enable a crossfade animation
+                    ),
+//                    imageVector = Icons.Filled.AccountBox,
                     contentDescription = null,
                     contentScale = ContentScale.Crop,
                     modifier = Modifier

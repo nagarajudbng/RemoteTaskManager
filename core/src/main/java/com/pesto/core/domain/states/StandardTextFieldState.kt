@@ -8,5 +8,4 @@ import com.pesto.core.presentation.Error
 data class StandardTextFieldState(
     var text:String = "",
     val error: Error? = null
-
 )

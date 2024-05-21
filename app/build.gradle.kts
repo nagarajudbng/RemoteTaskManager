@@ -46,6 +46,7 @@ android {
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.1"
     }
+
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
@@ -66,6 +67,7 @@ dependencies {
     implementation(project(":taskhome"))
     implementation(project(":taskcreate"))
     implementation(libs.firebase.database)
+    implementation(project(":authentication"))
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -98,6 +100,7 @@ dependencies {
     // optional - GCMNetworkManager support
     implementation (libs.androidx.work.gcm)
 
+    implementation (libs.accompanist.coil)
 
 
 }

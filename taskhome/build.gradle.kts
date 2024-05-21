@@ -76,5 +76,5 @@ dependencies {
     implementation(libs.room.ktx)
     kapt(libs.room.compiler)
     implementation(libs.room.paging)
-
+    implementation (libs.accompanist.coil)
 }

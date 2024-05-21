@@ -26,22 +26,3 @@ abstract class RepositoryModule{
     @Singleton
     abstract fun provideRemoteRepository(taskRemoteRepositoryImpl: TaskRemoteRepositoryImpl):RemoteRepository
 }
-//
-//@Module
-//@InstallIn(SingletonComponent::class)
-//abstract class RemoteRepositoryModule {
-//
-//    @Binds
-//    @Singleton
-//    abstract fun provideRemoteRepository(taskRemoteRepositoryImpl: TaskRemoteRepositoryImpl):TaskRepository
-//
-//}
-//
-//
-//@Module
-//@InstallIn(SingletonComponent::class)
-//abstract class LocalRepositoryModule {
-//    @Binds
-//    @Singleton
-//    abstract fun provideLocalRepository(taskLocalRepositoryImpl: TaskLocalRepositoryImpl): TaskRepository
-//}
