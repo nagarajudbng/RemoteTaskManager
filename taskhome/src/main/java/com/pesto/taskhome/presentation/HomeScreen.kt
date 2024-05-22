@@ -478,42 +478,6 @@ fun PopUpMenuButton(
                         }
                     )
                 }
-                /*
-                options.forEachIndexed { _, item ->
-                    DropdownMenuItem(
-                        text = { Text(text = "label") },
-                        onClick = {
-                        expanded = false
-                        action(item.id)
-                    }) {
-                        Row(
-                            horizontalArrangement = Arrangement.SpaceBetween,
-                            verticalAlignment = Alignment.CenterVertically,
-                        ) {
-                            Icon(
-                                painterResource(id = item.icon),
-                                contentDescription = null,
-                                tint = iconTint,
-                            )
-                            Spacer(modifier = Modifier.width(8.dp))
-                            Text(
-                                text = item.label,
-                                style = TextStyle(
-                                    fontSize = 12.sp,
-                                    shadow = Shadow(
-                                        color = Color.Black, offset = Offset(0.0f, 0.0f), blurRadius = 0f
-                                    )
-                                ),
-                                overflow = TextOverflow.Ellipsis
-                            )
-                        }
-                    }
-                    if (item.hasBottomDivider) {
-                        Divider()
-                    }
-                }
-
-                 */
             }
         }
     }
