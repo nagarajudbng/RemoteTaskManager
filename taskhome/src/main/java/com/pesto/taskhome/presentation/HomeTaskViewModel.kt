@@ -19,6 +19,7 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
+import java.util.Date
 import javax.inject.Inject
 
 @HiltViewModel
@@ -153,14 +154,32 @@ class HomeTaskViewModel @Inject constructor(
         val dateFormat = SimpleDateFormat("EEEE, dd MMMM, yyyy")
 
         try {
+            // Parse the date string
             val date = dateFormat.parse(dateString)
 
+            // Get the Unix timestamp of the parsed date
             val targetTimestamp = date.time
 
+            // Get the current Unix timestamp
             val currentTimestamp = System.currentTimeMillis()
 
-            if (currentTimestamp > targetTimestamp) {
+            // Get the current date components
+            val currentDate = Date(currentTimestamp)
+            val currentDay = currentDate.day
+            val currentMonth = currentDate.month
+            val currentYear = currentDate.year
+
+            // Get the parsed date components
+            val targetDate = Date(targetTimestamp)
+            val targetDay = targetDate.day
+            val targetMonth = targetDate.month
+            val targetYear = targetDate.year
+
+            // Compare the date components
+            if (currentYear > targetYear || (currentYear == targetYear && (currentMonth > targetMonth || (currentMonth == targetMonth && currentDay > targetDay)))) {
                 return true
+            } else if (currentYear == targetYear && currentMonth == targetMonth && currentDay == targetDay) {
+                return false
             } else {
                 return false
             }

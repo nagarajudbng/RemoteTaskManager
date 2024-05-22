@@ -63,6 +63,7 @@ import com.pesto.core.presentation.AppBar
 import com.pesto.core.presentation.DatePickerWithDialog
 import com.pesto.core.presentation.UiEvent
 import com.pesto.core.presentation.asString
+import com.pesto.core.util.ThemeColors
 import com.pesto.taskhome.R
 import kotlinx.coroutines.flow.collectLatest
 
@@ -115,8 +116,7 @@ fun HomeScreen(
                 onClick = {
                     onNavigation("CreateTask")
                 },
-                containerColor = Color(0xFF396803)
-//                Modifier.background(Color(0xFF396803))
+                containerColor = ThemeColors.buttonsBackgroundColor
             ) {
                 Icon(Icons.Filled.Add, "")
             }
@@ -350,7 +350,7 @@ fun ListItem(
                             Text(
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .background(Color(0xFF9FCA6D)),
+                                    .background(ThemeColors.dueDateColor),
                                 textAlign = TextAlign.Start,
                                 text = " Due Date : ${task.dueDate}",
                                 color = Color.White,
@@ -411,7 +411,7 @@ fun ListItem(
                             .wrapContentHeight()
                             .fillMaxWidth()
                             .align(Alignment.BottomCenter)
-                            .background(Color(0xFF9FCA6D)),
+                            .background(ThemeColors.dueDateColor),
 
                         textAlign = TextAlign.End,
                         text = " ",

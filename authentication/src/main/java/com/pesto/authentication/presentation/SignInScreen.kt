@@ -26,6 +26,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.pesto.core.presentation.UiEvent
 import com.pesto.core.presentation.Validations
+import com.pesto.core.util.ThemeColors
 import kotlinx.coroutines.flow.collectLatest
 
 
@@ -68,7 +69,7 @@ fun SignInScreen(
                     fontSize = 14.sp,
                     fontFamily = FontFamily.Default,
                     textDecoration = TextDecoration.Underline,
-                    color = Color(0xFF396803)
+                    color = ThemeColors.buttonsBackgroundColor
                 )
             )
         }
@@ -140,7 +141,7 @@ fun SignInScreen(
                 },
                 modifier = Modifier.fillMaxWidth(),
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = Color(0xFF396803)
+                    containerColor = ThemeColors.buttonsBackgroundColor
                 )
             ) {
                 Text("Sign In")

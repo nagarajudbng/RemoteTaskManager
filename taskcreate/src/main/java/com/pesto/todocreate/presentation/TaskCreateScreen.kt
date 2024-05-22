@@ -51,6 +51,7 @@ import com.pesto.core.presentation.AppBar
 import com.pesto.core.presentation.CustomDropDownMenu
 import com.pesto.core.presentation.DatePickerWithDialog
 import com.pesto.core.presentation.asString
+import com.pesto.core.util.ThemeColors
 import com.pesto.todocreate.R
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
@@ -264,7 +265,7 @@ fun TaskCreateScreen(
 //                      viewModel.generateRandomTask()
                     },
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = Color(0xFF396803)
+                        containerColor = ThemeColors.buttonsBackgroundColor
                     )
                 ) {
                     Text(text = "ADD TODO")

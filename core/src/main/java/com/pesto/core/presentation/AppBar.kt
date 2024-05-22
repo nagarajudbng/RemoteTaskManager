@@ -38,6 +38,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
 import com.pesto.core.R
+import com.pesto.core.util.ThemeColors
 
 
 // Created by Nagaraju Deshetty on 07/05/24.
@@ -116,7 +117,7 @@ fun AppBar(
                 }
             },
 
-            colors = TopAppBarDefaults.smallTopAppBarColors(Color(0xFF598626)),
+            colors = TopAppBarDefaults.smallTopAppBarColors(ThemeColors.statusBarColor),
             actions = {
                 Row(
                     modifier=Modifier.fillMaxHeight().padding(end = 10.dp),

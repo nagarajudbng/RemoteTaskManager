@@ -20,6 +20,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.pesto.core.presentation.UiEvent
 import com.pesto.core.presentation.Validations
+import com.pesto.core.util.ThemeColors
 import kotlinx.coroutines.flow.collectLatest
 
 
@@ -164,7 +165,7 @@ fun SignUpScreen(
                 },
                 modifier = Modifier.fillMaxWidth(),
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = Color(0xFF396803)
+                    containerColor = ThemeColors.buttonsBackgroundColor
                 )
             ) {
                 Text("Sign Up")

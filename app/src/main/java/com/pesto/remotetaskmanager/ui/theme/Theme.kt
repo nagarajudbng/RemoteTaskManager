@@ -10,6 +10,7 @@ import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
@@ -19,6 +20,12 @@ import androidx.core.view.WindowCompat
 private val CustomDarkColorScheme = darkColorScheme(
     primary = Green,
     secondary = Green,
+    tertiary = Green
+)
+
+private val CustomThemeColor = darkColorScheme(
+    primary = CustomThemColorStatusBar,
+    secondary = CustomThemColor,
     tertiary = Green
 )
 
@@ -64,7 +71,7 @@ fun RemoteTaskManagerTheme(
     if (!view.isInEditMode) {
         SideEffect {
             val window = (view.context as Activity).window
-            window.statusBarColor = CustomDarkColorScheme.primary.toArgb()
+            window.statusBarColor = CustomThemeColor.primary.toArgb()
             WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = darkTheme
         }
     }

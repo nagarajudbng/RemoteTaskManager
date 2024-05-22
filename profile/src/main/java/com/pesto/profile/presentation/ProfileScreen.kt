@@ -36,6 +36,7 @@ import androidx.compose.ui.window.DialogProperties
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.accompanist.coil.rememberCoilPainter
 import com.pesto.core.presentation.UiEvent
+import com.pesto.core.util.ThemeColors
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 
@@ -119,7 +120,7 @@ fun ProfileScreen(
             modifier = Modifier
                 .size(120.dp)
                 .clip(CircleShape)
-                .background(Color(0xFF396803))
+                .background(ThemeColors.buttonsBackgroundColor)
                 .clickable {
                     getContent.launch("image/*") // Calls getContent
                 },
@@ -201,7 +202,7 @@ fun ProfileScreen(
                         viewModel.onEvent(ProfileEvent.Save)
                     },
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = Color(0xFF396803)
+                        containerColor = ThemeColors.buttonsBackgroundColor
                     ),
                     modifier = Modifier
                         .width(130.dp)
@@ -217,7 +218,7 @@ fun ProfileScreen(
                         viewModel.onEvent(ProfileEvent.Logout)
                     },
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = Color(0xFF396803)
+                        containerColor = ThemeColors.buttonsBackgroundColor
                     ),
                     modifier = Modifier
                         .width(130.dp)

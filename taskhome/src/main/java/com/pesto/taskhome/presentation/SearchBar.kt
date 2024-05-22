@@ -36,6 +36,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.pesto.core.util.ThemeColors
 import com.pesto.taskhome.R
 import kotlinx.coroutines.delay
 
@@ -140,10 +141,10 @@ fun SearchBar(
                 }
             },
             colors = TextFieldDefaults.outlinedTextFieldColors(
-                unfocusedBorderColor = Color(0xFF598626),
-                containerColor = Color(0xFF598626),
+                unfocusedBorderColor = ThemeColors.statusBarColor,
+                containerColor = ThemeColors.statusBarColor,
                 focusedTextColor = Color.White,
-                focusedBorderColor = Color(0xFF598626)
+                focusedBorderColor = ThemeColors.statusBarColor
 
             ),
             singleLine = true,
