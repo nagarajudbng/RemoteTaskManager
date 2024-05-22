@@ -1,10 +1,13 @@
-package com.pesto.todocreate
+package com.pesto.taskhome
 
+import org.junit.After
 import com.pesto.core.data.mapper.toTaskEntity
+import com.pesto.core.data.mapper.toUpdateTaskEntity
 import com.pesto.core.data.repository.TaskLocalRepositoryImpl
 import com.pesto.core.data.repository.TaskRemoteRepositoryImpl
 import com.pesto.core.domain.model.Task
-import com.pesto.todocreate.domain.usecase.TaskCreateUseCase
+import com.single.todohome.usecases.DeleteTaskUseCase
+import com.single.todohome.usecases.FilterTaskUseCase
 import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Test
@@ -14,10 +17,10 @@ import org.mockito.Mockito.verify
 import org.mockito.Mockito.`when`
 import org.mockito.MockitoAnnotations
 
-// Created by Nagaraju on 13/05/24.
 
-class TaskCreateUseCaseTest {
+// Created by Nagaraju on 22/05/24.
 
+class FilterTaskUseCaseTest {
 
     @Mock
     private lateinit var localRepositoryImpl: TaskLocalRepositoryImpl
@@ -26,19 +29,24 @@ class TaskCreateUseCaseTest {
     private lateinit var remoteRepositoryImpl: TaskRemoteRepositoryImpl
 
     @InjectMocks
-    private lateinit var todoCreateUseCase: TaskCreateUseCase
+    private lateinit var filterTaskUseCase: FilterTaskUseCase
+
     @Before
-    fun setup(){
+    fun setUp() {
         MockitoAnnotations.initMocks(this)
     }
 
     @Test
-    fun insertTaskTest(): Unit = runBlocking {
+    fun testFilter(): Unit = runBlocking {
         val task = Task(id = 1, title = "Task1", description = "Description1", status = "TO DO",dueDate = "Saturday, 25 May, 2024")
-        val id = 1L
-        `when`(localRepositoryImpl.insert(task.toTaskEntity())).thenReturn(id)
-        todoCreateUseCase.insert(task)
-        verify(remoteRepositoryImpl).insert(id,task.toTaskEntity())
+        val query = "task"
+        filterTaskUseCase.filter(query)
+        verify(localRepositoryImpl).filter(query)
+
+    }
+
+    @After
+    fun tearDown() {
     }
 
 }

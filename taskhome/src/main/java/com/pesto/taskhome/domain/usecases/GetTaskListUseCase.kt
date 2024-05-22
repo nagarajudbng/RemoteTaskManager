@@ -15,7 +15,6 @@ class GetTaskListUseCase @Inject constructor(
     private var remoteRepositoryImpl: TaskRemoteRepositoryImpl
 ) {
     suspend fun getTaskList(): Flow<List<Task>>{
-        Log.d("Search HomeTaskUseCase","getTaskList")
         return localRepositoryImpl.getTaskList().map { taskEntityList ->
             taskEntityList.map { taskEntity ->
                 Task(

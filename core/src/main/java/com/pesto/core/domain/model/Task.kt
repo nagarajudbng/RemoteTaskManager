@@ -5,5 +5,5 @@ data class Task(
     var title: String,
     var description: String,
     var status: String,
-    val dueDate: String
+    var dueDate: String
 )

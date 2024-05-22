@@ -12,7 +12,7 @@ class ConfirmPasswordValidationUseCase @Inject constructor(){
         return if (confirmPassword.length < Constants.MIN_PASSWORD_LENGTH) {
             Validations.PASSWORD_TOO_SHORT
         } else if (confirmPassword.length > Constants.MAX_PASSWORD_LENGTH) {
-            Validations.USERNAME_TOO_LONG
+            Validations.PASSWORD_TOO_LONG
         } else if (password != confirmPassword) {
             Validations.PASSWORD_NOT_MATCH
         } else  {

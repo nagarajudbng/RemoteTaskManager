@@ -148,11 +148,13 @@ class TaskViewModel @Inject constructor(
                         )
 
                         dialogState.value = true
-                        val taskResult = taskCreateUseCase.insert(task = task)
-                        taskResult.result?.let {
-                            if (it > 0) {
-                            }
-                        }
+//                        insert(task)
+                        taskCreateUseCase.insert(task)
+//                        val taskResult = taskCreateUseCase.insert(task = task)
+//                        taskResult.result?.let {
+//                            if (it > 0) {
+//                            }
+//                        }
                     }
 
                 }
@@ -162,9 +164,9 @@ class TaskViewModel @Inject constructor(
     }
 
      fun insert(task: Task) {
-        viewModelScope.launch {
-            taskCreateUseCase.insert(task)
-        }
+//        viewModelScope.launch {
+//            taskCreateUseCase.insert(task)
+//        }
     }
 
     fun generateRandomTask(){

@@ -17,7 +17,6 @@ class SearchTaskUseCase @Inject constructor(
 
 
      suspend fun searchQuery(query: String): Flow<List<Task>> {
-         Log.d("Search HomeTaskUseCase","searchQuery")
          return localRepositoryImpl.searchQuery(query).map { taskEntityList ->
              taskEntityList.map { taskEntity ->
                  Task(

@@ -3,7 +3,7 @@ package com.pesto.core
 import com.pesto.core.data.repository.TaskLocalRepositoryImpl
 import com.pesto.core.data.source.local.AppDatabase
 import com.pesto.core.data.source.local.dao.TaskDao
-import com.pesto.core.data.source.local.entity.Task
+import com.pesto.core.data.source.local.entity.TaskEntity
 import junit.framework.TestCase.assertEquals
 import kotlinx.coroutines.runBlocking
 import org.junit.Before
@@ -35,9 +35,9 @@ class TaskLocalRepositoryImplTest {
     }
 
     @Test
-    fun insertTaskTest(): Unit {
+    fun insertTaskTest()= runBlocking {
         val expectedId = 123L
-        var task = Task(id = 1, title = "task1",description = "description1",status = "To Do")
+        var task = TaskEntity(id = 1, title = "task1",description = "description1",status = "To Do", dueDate = "Saturday, 25 May, 2024")
         `when`(appDatabase.taskDao).thenReturn(taskDao)
         `when`(taskDao.insert(task)).thenReturn(expectedId)
 
@@ -49,16 +49,16 @@ class TaskLocalRepositoryImplTest {
 
     @Test
     fun deleteTaskTest()= runBlocking {
-        var task = Task(id = 1, title = "task1",description = "description1",status = "To Do")
+        var task = TaskEntity(id = 1, title = "task1",description = "description1",status = "To Do",dueDate = "Saturday, 25 May, 2024")
         `when`(appDatabase.taskDao).thenReturn(taskDao)
         repository.delete(task)
-        verify(taskDao).delete(task)
+        verify(taskDao).delete(task.id)
     }
 
 
     @Test
     fun updateTaskTest()= runBlocking {
-        var task = Task(id = 1, title = "task1",description = "description1",status = "To Do")
+        var task = TaskEntity(id = 1, title = "task1",description = "description1",status = "To Do",dueDate = "Saturday, 25 May, 2024")
         `when`(appDatabase.taskDao).thenReturn(taskDao)
         repository.update(task)
         verify(taskDao).update(task)

@@ -59,9 +59,7 @@ dependencies {
 
     //Mockito
     testImplementation(libs.mockito.inline)
-
-
-
+    testImplementation(libs.kotlinx.coroutines.test)
     //hilt
     implementation(libs.hilt.android)
     kapt(libs.hilt.android.compiler)

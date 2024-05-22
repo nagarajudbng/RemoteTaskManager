@@ -16,7 +16,6 @@ class DeleteTaskUseCase @Inject constructor(
 ) {
 
     suspend fun delete(task: Task) {
-        Log.d("Search HomeTaskUseCase","delete")
         localRepositoryImpl.delete(task.toUpdateTaskEntity())
         remoteRepositoryImpl.delete(task.toUpdateTaskEntity())
     }

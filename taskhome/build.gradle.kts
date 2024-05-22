@@ -64,8 +64,7 @@ dependencies {
 
     //Mockito
     testImplementation(libs.mockito.inline)
-
-
+    testImplementation(libs.kotlinx.coroutines.test)
 
     //hilt
     implementation(libs.hilt.android)
@@ -77,4 +76,6 @@ dependencies {
     kapt(libs.room.compiler)
     implementation(libs.room.paging)
     implementation (libs.accompanist.coil)
+    testImplementation (libs.androidx.core.testing)
+
 }

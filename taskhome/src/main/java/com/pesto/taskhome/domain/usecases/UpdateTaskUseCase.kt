@@ -15,7 +15,6 @@ class UpdateTaskUseCase @Inject constructor(
     private var remoteRepositoryImpl: TaskRemoteRepositoryImpl
 ) {
     suspend fun update(task: Task) {
-        Log.d("Search HomeTaskUseCase","update")
         localRepositoryImpl.update(task.toUpdateTaskEntity())
         remoteRepositoryImpl.update(task.toUpdateTaskEntity())
     }

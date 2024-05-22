@@ -16,7 +16,6 @@ class FilterTaskUseCase @Inject constructor(
 ) {
 
     suspend fun filter(query: String): Flow<List<Task>> {
-        Log.d("Search HomeTaskUseCase","filter")
         return localRepositoryImpl.filter(query).map { taskEntityList ->
             taskEntityList.map { taskEntity ->
                 Task(
