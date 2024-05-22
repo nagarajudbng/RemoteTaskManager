@@ -13,6 +13,7 @@ import com.pesto.authentication.domain.repository.SignUpRepository
 import com.pesto.core.data.mapper.toProfileDomain
 import com.pesto.core.data.source.local.dao.ProfileDao
 import com.pesto.core.data.source.local.entity.ProfileEntity
+import com.pesto.core.domain.model.ProfileDomain
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -76,8 +77,8 @@ class SignUpRepositoryImpl(
             checkUserDB.addListenerForSingleValueEvent(object :ValueEventListener{
                 override fun onDataChange(snapshot: DataSnapshot) {
                     if(snapshot.exists()){
-                        var passwordDB = snapshot.child(userName).child("password").getValue(String::class.java)
-                        var email = snapshot.child(userName).child("emailID").getValue(String::class.java)
+                        val passwordDB = snapshot.child(userName).child("password").getValue(String::class.java)
+                        val email = snapshot.child(userName).child("emailID").getValue(String::class.java)
                         if(passwordDB.equals(password)){
                             val userEntity= ProfileEntity(
                                 id = 0,
@@ -85,11 +86,11 @@ class SignUpRepositoryImpl(
                                 emailID = email
                             )
                             CoroutineScope(Dispatchers.IO).launch {
-                                profileDao.delete()
-                                profileDao.insert(userEntity)
-                                continuation.resume(SignInDomain(isValid = true, profile = profileDao.getProfile().toProfileDomain()))
-//                                sharedPreferences.edit().putString("userName",userName).putString("email",email).apply()
-
+                                Log.d("Signin",email.toString())
+                                sharedPreferences.edit().putString("userName",userName)
+                                    .putString("email",email.toString()).apply()
+                                val profile = ProfileDomain(id = 0, name = userName,email=email!!, image = "")
+                                continuation.resume(SignInDomain(isValid = true, profile = profile))
                             }
 
                         }else {

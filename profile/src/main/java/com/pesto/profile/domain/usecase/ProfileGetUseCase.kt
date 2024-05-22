@@ -1,6 +1,7 @@
 package com.pesto.profile.domain.usecase
 
 import android.net.Uri
+import android.util.Log
 import com.pesto.core.domain.model.ProfileDomain
 import com.pesto.profile.domain.repository.ProfileRepository
 import javax.inject.Inject
@@ -13,6 +14,8 @@ class ProfileGetUseCase @Inject constructor(
 ){
 
     suspend operator fun invoke():ProfileDomain{
-            return repository.getProfile()
+        var value = repository.getProfile()
+        Log.d("Profile test 2",value.toString())
+            return value
     }
 }

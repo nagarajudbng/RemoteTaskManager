@@ -28,7 +28,7 @@ import kotlinx.coroutines.launch
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 fun AppNavHost(
     navController: NavHostController,
-    startDestination: String = NavigationItem.SIGN_IN.route
+    startDestination: String
     ) {
     val snackBarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
@@ -75,7 +75,14 @@ fun AppNavHost(
                 composable(NavigationItem.PROFILE.route) {
                     ProfileScreen(
                         onNavigation = {
-                            navController.popBackStack()
+                            if(it == "Logout"){
+                                navController.navigate(NavigationItem.SIGN_IN.route) {
+                                    // Pop up to the login screen, removing all other screens from the back stack
+                                    popUpTo(NavigationItem.SIGN_IN.route) {
+                                        inclusive = true
+                                    }
+                                }
+                            }
                         }
                     )
                 }
@@ -83,7 +90,11 @@ fun AppNavHost(
                     SignInScreen(
                         onNavigation = {
                             if(it == "TaskList"){
-                                navController.navigate(NavigationItem.HOME.route)
+                                navController.navigate(NavigationItem.HOME.route){
+                                    popUpTo(NavigationItem.SIGN_IN.route) {
+                                        inclusive = true
+                                    }
+                                }
                             }
                             if(it == "SingUp"){
                                 navController.navigate(NavigationItem.SIGNUP.route)
@@ -98,7 +109,7 @@ fun AppNavHost(
                             if(it == "TaskList"){
                                 navController.navigate(NavigationItem.HOME.route)
                             } else if(it == "SignIn"){
-                                navController.navigate(NavigationItem.SIGN_IN.route)
+                                navController.popBackStack()
                             }
                         }
                     )

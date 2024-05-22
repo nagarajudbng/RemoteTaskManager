@@ -46,6 +46,7 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(project(":core"))
+    implementation(libs.firebase.storage.ktx)
 //    implementation(libs.firebase.storage)
 //    implementation(libs.material)
     testImplementation(libs.junit)

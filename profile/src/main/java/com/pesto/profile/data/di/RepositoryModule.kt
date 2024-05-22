@@ -1,5 +1,6 @@
 package com.pesto.profile.data.di
 
+import android.content.SharedPreferences
 import com.google.firebase.database.DatabaseReference
 import com.pesto.core.data.source.local.dao.ProfileDao
 import com.pesto.profile.data.repository.ProfileRepositoryImpl
@@ -19,7 +20,7 @@ import javax.inject.Singleton
 object RepositoryModule{
     @Provides
     @Singleton
-     fun provideProfileRepository(@Named("Auth") databaseReference: DatabaseReference,profileDao:ProfileDao):ProfileRepository{
-        return ProfileRepositoryImpl(databaseReference,profileDao)
+     fun provideProfileRepository(@Named("Auth") databaseReference: DatabaseReference,profileDao:ProfileDao,sharedPreferences: SharedPreferences):ProfileRepository{
+        return ProfileRepositoryImpl(databaseReference,profileDao,sharedPreferences)
      }
 }

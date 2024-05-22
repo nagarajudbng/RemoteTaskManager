@@ -1,6 +1,7 @@
 package com.pesto.profile.presentation
 
 import android.content.SharedPreferences
+import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.core.net.toUri
 import androidx.lifecycle.ViewModel
@@ -8,8 +9,11 @@ import androidx.lifecycle.viewModelScope
 import com.pesto.core.presentation.UiEvent
 import com.pesto.core.presentation.UiText
 import com.pesto.core.presentation.Validations
+import com.pesto.profile.domain.model.LogoutResponse
+import com.pesto.profile.domain.model.Response
 import com.pesto.profile.domain.usecase.EmailValidationUseCase
 import com.pesto.profile.domain.usecase.ProfileGetUseCase
+import com.pesto.profile.domain.usecase.ProfileLogoutUseCase
 import com.pesto.profile.domain.usecase.ProfileSaveUseCase
 import com.pesto.profile.domain.usecase.UserNameValidationUseCase
 import com.pesto.profile.presentation.model.ProfileUI
@@ -37,7 +41,9 @@ class ProfileViewModel @Inject constructor(
     private var userNameValidationUseCase: UserNameValidationUseCase,
     private var emailValidationUseCase: EmailValidationUseCase,
    private var profileGetUseCase: ProfileGetUseCase,
-    private var profileSaveUseCase: ProfileSaveUseCase
+    private var profileSaveUseCase: ProfileSaveUseCase,
+    private var profileLogoutUseCase: ProfileLogoutUseCase
+
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(UserProfileState())
@@ -54,6 +60,9 @@ class ProfileViewModel @Inject constructor(
 
     private val _eventFlow = MutableSharedFlow<UiEvent>()
     val eventFlow = _eventFlow.asSharedFlow()
+
+    private val _dialogState = mutableStateOf(false)
+    val dialogState = _dialogState
 
 
     init {
@@ -76,9 +85,25 @@ class ProfileViewModel @Inject constructor(
                     uri = event.uri
                 )
             }
+            is ProfileEvent.Logout -> {
+                viewModelScope.launch {
+                    _dialogState.value = true
+                    when (profileLogoutUseCase()) {
+                        LogoutResponse.Success -> {
+                            _eventFlow.emit(UiEvent.NavigateUp("Success"))
+                            _dialogState.value = false
+                        }
 
+                        LogoutResponse.Fail -> {
+                            _eventFlow.emit(UiEvent.ShowSnackBar(UiText.DynamicString("Something went wrong")))
+                            _dialogState.value = false
+                        }
+                    }
+                }
+            }
             is ProfileEvent.Save->{
                 viewModelScope.launch {
+
                     val userNameResult = userNameValidationUseCase(_userName.value.text)
                     var status:String = ""
                     status = when(userNameResult){
@@ -100,52 +125,39 @@ class ProfileViewModel @Inject constructor(
                     if(userNameResult == Validations.USERNAME_VALID
                         && emailResult == Validations.EMAIL_VALID)
                     {
-                        profileSaveUseCase(
+                        _dialogState.value = true
+                        val updateResult = profileSaveUseCase(
                             id.value,
                             _userName.value.text,
                             _email.value.text,
                             _imageURI.value.uri!!
                         )
-//                        val signUpResult = profileUseCase(
-//                            _userName.value.text,
-//                            _email.value.text,
-//                        )
-//                        if(signUpResult.isAlreadyExists){
-//                            _eventFlow.emit(UiEvent.ShowSnackBar(UiText.DynamicString("Already Exists")))
-//                        } else if(signUpResult.isValid){
-//                            _eventFlow.emit(UiEvent.NavigateUp("Success"))
-//                        }
+                        when(updateResult){
+                            is Response.Loading -> _dialogState.value = true
+                            is Response.Success -> {
+                                _dialogState.value = false
+                            }
+
+                            is Response.Failure -> _dialogState.value = false
+                        }
                     }
                 }
             }
+
+            else -> {}
         }
     }
 
    private fun load() {
         viewModelScope.launch {
             val profileDomain = profileGetUseCase()
-            val profiles = listOf( ProfileUI(1L,"","",""))
-
-            if (profiles.isNotEmpty()) {
+            Log.d("Profile home",profileDomain.toString())
                 _id.value = profileDomain.id
                 _userName.value.text = profileDomain.name
                 _email.value.text = profileDomain.email
-                _imageURI.value.uri = profileDomain.image.toUri()
-//                val profile = profiles.first()
-//                val name = sharedPreferences.getString("userName","")
-//                val email = sharedPreferences.getString("email","")
-//                val image = sharedPreferences.getString("image","")
-//                _state.update {
-//                    it.copy(
-//                        name = name.toString(),
-//                        image = image,
-//                        email = email.toString(),
-//                        id = profile.id
-//                    )
-//                }
-
-//                setProfileImageUri(profile.image)
-            }
+                _imageURI.value = imageURI.value.copy(
+                   uri = profileDomain.image.toUri()
+                )
 
         }
     }

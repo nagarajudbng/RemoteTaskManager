@@ -7,4 +7,6 @@ sealed class ProfileEvent {
     data class EnteredEmail(val email: String) : ProfileEvent()
     data class EnteredImageURI(val uri: Uri) : ProfileEvent()
     object Save:ProfileEvent()
+    object Logout:ProfileEvent()
+    data class DialogueEvent(val showDialogue: Boolean) : ProfileEvent()
 }
