@@ -1,8 +1,8 @@
 package com.pesto.taskhome.presentation
 
-import android.annotation.SuppressLint
-import android.media.Image
+import android.os.Build
 import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -47,7 +47,6 @@ import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
@@ -55,22 +54,22 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
-import androidx.compose.ui.text.toUpperCase
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.pesto.core.domain.model.Task
 import com.pesto.core.presentation.AppBar
+import com.pesto.core.presentation.DatePickerWithDialog
 import com.pesto.core.presentation.UiEvent
 import com.pesto.core.presentation.asString
 import com.pesto.taskhome.R
 import kotlinx.coroutines.flow.collectLatest
-import java.text.SimpleDateFormat
 
 // Created by Nagaraju Deshetty on 07/05/24.
 
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 @Preview
 fun HomeScreenPreview() {
@@ -79,6 +78,7 @@ fun HomeScreenPreview() {
         onSnackBarMessage = {})
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
@@ -190,6 +190,8 @@ fun TopBarView(
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ShowTodoList(viewModel: HomeTaskViewModel) {
 
@@ -208,8 +210,8 @@ fun ShowTodoList(viewModel: HomeTaskViewModel) {
             items(todoList.size) { item ->
                 ListItem(
                     todoList[item],
-                    action = { l, s ->
-                        viewModel.onEvent(TaskUpdateEvent.EnteredActionUpdate(l, s))
+                    action = { task, status ->
+                         viewModel.onEvent(TaskUpdateEvent.EnteredActionUpdate(task, status))
                     }
                 )
             }
@@ -233,11 +235,24 @@ fun ListItemPreview() {
 //    ListItem(Task(title = "Hello", description = "Description", status = ""))
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun ListItem(
     task: Task,
     action: (Task, String) -> Unit
 ) {
+    val dialogState = remember { mutableStateOf(false) }
+    val updateState = remember { mutableStateOf("") }
+    if(dialogState.value){
+        DatePickerWithDialog(
+            onSelected = {
+                dialogState.value = false
+                task.dueDate = it
+                action(task, updateState.value)
+            },
+            showModeToggle = true
+        )
+    }
 
     Card(
         modifier = Modifier
@@ -272,7 +287,7 @@ fun ListItem(
 
                     ) {
                         var spanStyle:SpanStyle
-                        if (isDueDateOver(task.dueDate)) {
+                        if (task.isDueDateOver) {
                             spanStyle = SpanStyle(textDecoration = TextDecoration.LineThrough)
                         } else {
                             spanStyle = SpanStyle()
@@ -376,23 +391,20 @@ fun ListItem(
                             )
                         )
                     )
-
-
-
                     PopUpMenuButton(
                         modifier = Modifier.wrapContentSize(),
                         options = popUpMenu,
                         imageVector = Icons.Filled.MoreVert,
                         action = {
-                            action(task, it)
+                            if((task.isDueDateOver) &&(it == "To Do" || it == "In Progress")){
+                                dialogState.value = true
+                                updateState.value = it
+                            } else {
+                                action(task, it)
+                            }
                         },
                         iconTint = Color.Black
                     )
-//                    IconButton(onClick = {
-//
-//                    }) {
-//                        Icon(imageVector = Icons.Filled.MoreVert, contentDescription = "")
-//                    }
                 }
 
 
@@ -482,26 +494,4 @@ fun PopUpMenuButton(
         }
     }
 
-}
-@SuppressLint("SimpleDateFormat")
-fun isDueDateOver(dateString: String): Boolean {
-    val dateFormat = SimpleDateFormat("EEEE, dd MMMM, yyyy")
-
-    try {
-        val date = dateFormat.parse(dateString)
-
-        val targetTimestamp = date.time
-
-        val currentTimestamp = System.currentTimeMillis()
-
-        if (currentTimestamp > targetTimestamp) {
-            return true
-        } else {
-            return false
-        }
-
-    } catch (e: Exception) {
-        e.printStackTrace()
-    }
-    return false
 }

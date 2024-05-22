@@ -1,5 +1,6 @@
 package com.pesto.taskhome.presentation
 
+import android.annotation.SuppressLint
 import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
@@ -17,6 +18,7 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
 import javax.inject.Inject
 
 @HiltViewModel
@@ -83,7 +85,7 @@ class HomeTaskViewModel @Inject constructor(
                         getTaskList()
                     } else {
                         filterTaskUseCase.filter(event.query).collect {
-                            todoList.value = it
+                            _todoList.value = todoListTransformation(it)
                         }
                     }
                 }
@@ -101,12 +103,17 @@ class HomeTaskViewModel @Inject constructor(
     fun getTaskList() {
         viewModelScope.launch {
             getTaskListUseCase.getTaskList().collect {
-                todoList.value = it
+                _todoList.value = todoListTransformation(it)
             }
         }
 
     }
-
+    fun todoListTransformation(taskList: List<Task>): List<Task> {
+        val updatedList = taskList.map { task ->
+            task.copy(isDueDateOver = isDueDateOver(task.dueDate))
+        }
+        return updatedList
+    }
     fun onEvent(event: TaskUpdateEvent) {
         when (event) {
             is TaskUpdateEvent.EnteredActionUpdate -> {
@@ -136,10 +143,32 @@ class HomeTaskViewModel @Inject constructor(
         viewModelScope.launch {
             if (_searchQuery.value.isNotBlank()) {
                 searchTaskUseCase.searchQuery(_searchQuery.value).collectLatest { value ->
-                    todoList.value = value
+                    _todoList.value = todoListTransformation(value)
                 }
             }
         }
+    }
+    @SuppressLint("SimpleDateFormat")
+    fun isDueDateOver(dateString: String): Boolean {
+        val dateFormat = SimpleDateFormat("EEEE, dd MMMM, yyyy")
+
+        try {
+            val date = dateFormat.parse(dateString)
+
+            val targetTimestamp = date.time
+
+            val currentTimestamp = System.currentTimeMillis()
+
+            if (currentTimestamp > targetTimestamp) {
+                return true
+            } else {
+                return false
+            }
+
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+        return false
     }
 
 }
