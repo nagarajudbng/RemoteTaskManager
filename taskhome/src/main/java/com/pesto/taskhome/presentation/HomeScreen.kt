@@ -261,10 +261,7 @@ fun ListItem(
             .height(80.dp),
         colors = CardDefaults.cardColors(
             containerColor = Color.White //Card background color
-//            contentColor = Color.White  //Card content color,e.g.text
         )
-//            .background(Color.White)
-//        shape = MaterialTheme.shapes.medium,
     ) {
         Row(
             modifier = Modifier.fillMaxSize()
