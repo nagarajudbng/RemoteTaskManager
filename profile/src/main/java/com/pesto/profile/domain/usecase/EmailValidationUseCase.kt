@@ -1,4 +1,4 @@
-package com.pesto.authentication.domain.usecase
+package com.pesto.profile.domain.usecase
 
 import com.pesto.core.presentation.Validations
 import javax.inject.Inject
@@ -16,6 +16,7 @@ class EmailValidationUseCase @Inject constructor() {
                     dotIndex > atIndex + 1 &&
                     dotIndex < email.length - 2)){
             Validations.EMAIL_VALID
+
         }
         else {
             Validations.EMAIL_NOT_VALID

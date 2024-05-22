@@ -10,4 +10,5 @@ data class UserDB(
     val userName:String?=null,
     val emailID: String? = null,
     val password: String? = null,
+    val image:String? = null
 )

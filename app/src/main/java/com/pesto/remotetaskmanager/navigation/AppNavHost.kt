@@ -11,14 +11,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.pesto.authentication.presentation.SignInScreen
 import com.pesto.authentication.presentation.SignUpScreen
+import com.pesto.profile.presentation.ProfileScreen
 import com.pesto.taskhome.presentation.HomeScreen
-import com.pesto.taskhome.presentation.ProfileScreen
 import com.pesto.todocreate.presentation.TaskCreateScreen
 import kotlinx.coroutines.launch
 

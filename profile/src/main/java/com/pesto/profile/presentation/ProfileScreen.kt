@@ -1,6 +1,5 @@
-package com.pesto.taskhome.presentation
+package com.pesto.profile.presentation
 
-import android.content.Intent
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -11,12 +10,10 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AccountBox
 import androidx.compose.material.icons.filled.Done
 import androidx.compose.material.icons.filled.MailOutline
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.outlined.MailOutline
-//import androidx.compose.material3.icons.filled.Upload
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -42,7 +39,7 @@ fun ProfileScreen(
 ) {
     val viewModel = hiltViewModel<ProfileViewModel>()
     //var userProfile by remember { mutableStateOf(userProfile) }
-    val state by viewModel.state.collectAsState()
+//    val state by viewModel.state.collectAsState()
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
     val getContent = rememberLauncherForActivityResult(
@@ -53,7 +50,7 @@ fun ProfileScreen(
 //            context.contentResolver.takePersistableUriPermission(uri, Intent.FLAG_GRANT_READ_URI_PERMISSION )
 
             //userProfile = userProfile.copy(profileImageUri = it)
-            viewModel.setProfileImageUri(it.toString())
+            viewModel.onEvent(ProfileEvent.EnteredImageURI(it))
         }
     }
 
@@ -73,12 +70,12 @@ fun ProfileScreen(
                 },
             contentAlignment = Alignment.Center
         ) {
-            if (state.image != null) {
+//            if (state.image != null) {
                 Image(
                     // I replace this line
                     //painter = painterResource(id = R.drawable.ic_launcher_foreground),
                     painter = rememberCoilPainter(
-                        request = state.image, // or url
+                        request = viewModel.imageURI.value.uri, // or url
                         fadeIn = true // Optionally, you can enable a crossfade animation
                     ),
 //                    imageVector = Icons.Filled.AccountBox,
@@ -88,23 +85,23 @@ fun ProfileScreen(
                         .fillMaxSize()
                         .clip(CircleShape)
                 )
-            } else {
-                Icon(
-                    imageVector = Icons.Outlined.MailOutline,
-                    contentDescription = null,
-                    modifier = Modifier.size(48.dp),
-                    tint = MaterialTheme.colorScheme.onPrimary
-                )
-            }
+//            } else {
+//                Icon(
+//                    imageVector = Icons.Outlined.MailOutline,
+//                    contentDescription = null,
+//                    modifier = Modifier.size(48.dp),
+//                    tint = MaterialTheme.colorScheme.onPrimary
+//                )
+//            }
         }
 
         Spacer(modifier = Modifier.height(16.dp))
 
         // Name Field
         OutlinedTextField(
-            value = state.name,
+            value = viewModel.userName.value.text,
             onValueChange = {
-                viewModel.setName(it)
+                viewModel.onEvent(ProfileEvent.EnteredUserName(it))
             },
             label = { Text(text = "Name") },
             leadingIcon = { Icon(imageVector = Icons.Default.Person, contentDescription = null) },
@@ -117,9 +114,9 @@ fun ProfileScreen(
 
         // Email Field
         OutlinedTextField(
-            value = state.email, // Bind view Model
+            value = viewModel.email.value.text,
             onValueChange = {
-                viewModel.setEmail(it)
+                viewModel.onEvent(ProfileEvent.EnteredEmail(it))
             },
             label = { Text("Email") },
             leadingIcon = { Icon(
@@ -136,7 +133,7 @@ fun ProfileScreen(
         // Save Button
         Button(
             onClick = {
-                viewModel.saveUserProfile()
+                viewModel.onEvent(ProfileEvent.Save)
             },
             colors = ButtonDefaults.buttonColors(
                 containerColor = Color(0xFF396803)

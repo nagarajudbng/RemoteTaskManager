@@ -1,4 +1,4 @@
-package com.pesto.authentication.domain.util
+package com.pesto.core.util
 
 
 // Created by Nagaraju on 21/05/24.
@@ -9,4 +9,5 @@ object Constants {
     const val MAX_PASSWORD_LENGTH: Int = 15
     const val MAX_USERNAME_LENGTH: Int = 10
     const val MIN_USERNAME_LENGTH: Int = 5
+    const val SHARED_PREF_NAME: String="User"
 }

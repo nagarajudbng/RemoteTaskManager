@@ -1,6 +1,9 @@
 [versions]
 accompanistCoil = "0.15.0"
 agp = "8.4.0"
+firebaseBom = "33.0.0"
+firebaseIid = "21.1.0"
+firebaseStorage = "20.0.0"
 kotlin = "1.9.0"
 coreKtx = "1.13.1"
 junit = "4.13.2"
@@ -32,6 +35,9 @@ androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = 
 androidx-work-gcm = { module = "androidx.work:work-gcm", version.ref = "workRuntimeKtx" }
 androidx-work-runtime-ktx = { module = "androidx.work:work-runtime-ktx", version.ref = "workRuntimeKtx" }
 androidx-work-rxjava2 = { module = "androidx.work:work-rxjava2", version.ref = "workRuntimeKtx" }
+firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
+firebase-iid = { module = "com.google.firebase:firebase-iid", version.ref = "firebaseIid" }
+#firebase-storage = { module = "com.google.firebase:firebase-storage", version.ref = "firebaseStorage" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }

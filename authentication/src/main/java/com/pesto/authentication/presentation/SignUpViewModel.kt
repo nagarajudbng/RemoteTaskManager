@@ -82,7 +82,7 @@ class SignUpViewModel @Inject constructor(
                     viewModelScope.launch {
                         val userNameResult = userNameValidationUseCase(_userName.value.text)
                         var status:String = ""
-                        status = when(userNameResult.validations){
+                        status = when(userNameResult){
                             Validations.USERNAME_TOO_LONG -> "User Name Too long it should below 10 characters"
 
                             Validations.USERNAME_TOO_SHORT ->"User Name Too short it should above 5 characters"
@@ -93,7 +93,7 @@ class SignUpViewModel @Inject constructor(
                             statusText = status
                         )
                         val emailResult = emailValidationUseCase(_email.value.text)
-                        status = when(emailResult.validations){
+                        status = when(emailResult){
                             Validations.EMAIL_NOT_VALID ->"Email Not Valid"
                             else ->{""}
                         }
@@ -102,7 +102,7 @@ class SignUpViewModel @Inject constructor(
                         )
                         val passwordResult = passwordValidationUseCase(_password.value.text)
 
-                        status = when(passwordResult.validations){
+                        status = when(passwordResult){
                             Validations.PASSWORD_TOO_LONG -> "Password to long it should below 15 characters"
                             Validations.PASSWORD_TOO_SHORT ->"Password to short it should above 8 characters"
                             else -> {""}
@@ -111,7 +111,7 @@ class SignUpViewModel @Inject constructor(
                             statusText = status
                         )
                         val confirmResult = confirmPasswordValidationUseCase(_password.value.text,_confirmPassword.value.text)
-                        status = when(confirmResult.validations){
+                        status = when(confirmResult){
                             Validations.PASSWORD_TOO_LONG -> "Password to long it should below 15 characters"
                             Validations.PASSWORD_TOO_SHORT ->"Password to short it should above 8 characters"
                             Validations.PASSWORD_NOT_MATCH ->"Password & Confirm Password not matched"
@@ -120,10 +120,10 @@ class SignUpViewModel @Inject constructor(
                         _confirmPassword.value = confirmPassword.value.copy(
                             statusText = status
                         )
-                        if(userNameResult.validations == Validations.USERNAME_VALID
-                            && emailResult.validations == Validations.EMAIL_VALID
-                            && passwordResult.validations == Validations.PASSWORD_VALID
-                            && confirmResult.validations == Validations.PASSWORD_VALID){
+                        if(userNameResult == Validations.USERNAME_VALID
+                            && emailResult == Validations.EMAIL_VALID
+                            && passwordResult == Validations.PASSWORD_VALID
+                            && confirmResult == Validations.PASSWORD_VALID){
                             val signUpResult = signUpUseCase(
                                 _userName.value.text,
                                 _email.value.text,
@@ -142,7 +142,7 @@ class SignUpViewModel @Inject constructor(
                     viewModelScope.launch {
                         val userNameResult = userNameValidationUseCase(_userName.value.text)
                         var status:String = ""
-                        status = when(userNameResult.validations){
+                        status = when(userNameResult){
                             Validations.USERNAME_TOO_LONG -> "User Name Too long it should below 10 characters"
 
                             Validations.USERNAME_TOO_SHORT ->"User Name Too short it should above 5 characters"
@@ -153,7 +153,7 @@ class SignUpViewModel @Inject constructor(
                             statusText = status
                         )
                         val passwordResult = passwordValidationUseCase(_password.value.text)
-                        status = when(passwordResult.validations){
+                        status = when(passwordResult){
                             Validations.PASSWORD_TOO_LONG -> "Password to long it should below 15 characters"
                             Validations.PASSWORD_TOO_SHORT ->"Password to short it should above 8 characters"
                             else -> {""}
@@ -161,9 +161,9 @@ class SignUpViewModel @Inject constructor(
                         _password.value = password.value.copy(
                             statusText = status
                         )
-                        if(userNameResult.validations == Validations.USERNAME_VALID
-                            && passwordResult.validations == Validations.PASSWORD_VALID){
-                            var singInResult = signInUseCase(
+                        if(userNameResult == Validations.USERNAME_VALID
+                            && passwordResult == Validations.PASSWORD_VALID){
+                            val singInResult = signInUseCase(
                                 _userName.value.text,
                                 _password.value.text
                             )

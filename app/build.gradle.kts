@@ -68,6 +68,7 @@ dependencies {
     implementation(project(":taskcreate"))
     implementation(libs.firebase.database)
     implementation(project(":authentication"))
+    implementation(project(":profile"))
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

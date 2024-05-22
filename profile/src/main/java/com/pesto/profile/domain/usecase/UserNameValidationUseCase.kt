@@ -1,7 +1,7 @@
-package com.pesto.authentication.domain.usecase
+package com.pesto.profile.domain.usecase
 
-import com.pesto.core.util.Constants
 import com.pesto.core.presentation.Validations
+import com.pesto.core.util.Constants
 import javax.inject.Inject
 
 
@@ -16,6 +16,5 @@ class UserNameValidationUseCase @Inject constructor() {
         } else {
             Validations.USERNAME_VALID
         }
-
     }
 }

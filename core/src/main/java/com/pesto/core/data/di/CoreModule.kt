@@ -8,9 +8,9 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.pesto.core.data.source.local.AppDatabase
+import com.pesto.core.data.source.local.dao.ProfileDao
 import com.pesto.core.data.source.local.dao.TaskDao
-import com.pesto.core.data.source.local.dao.UserDao
-import com.pesto.core.data.util.Constants
+import com.pesto.core.util.Constants
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -41,8 +41,8 @@ class CoreModule {
     }
     @Provides
     @Singleton
-    fun provideUserDao(appDatabase: AppDatabase):UserDao{
-        return appDatabase.userDao
+    fun provideProfileDao(appDatabase: AppDatabase):ProfileDao{
+        return appDatabase.profileDao
     }
     @Provides
     @Singleton

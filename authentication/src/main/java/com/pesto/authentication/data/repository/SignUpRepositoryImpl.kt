@@ -10,8 +10,9 @@ import com.pesto.authentication.data.model.UserDB
 import com.pesto.authentication.domain.model.SignInDomain
 import com.pesto.authentication.domain.model.SignUpDomain
 import com.pesto.authentication.domain.repository.SignUpRepository
-import com.pesto.core.data.source.local.dao.UserDao
-import com.pesto.core.data.source.local.entity.UserEntity
+import com.pesto.core.data.mapper.toProfileDomain
+import com.pesto.core.data.source.local.dao.ProfileDao
+import com.pesto.core.data.source.local.entity.ProfileEntity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -24,7 +25,7 @@ import kotlin.coroutines.suspendCoroutine
 
 class SignUpRepositoryImpl(
     @Named("Auth") private val databaseReference: DatabaseReference,
-    private val userDao: UserDao,
+    private val profileDao: ProfileDao,
     private val sharedPreferences: SharedPreferences
 ):SignUpRepository {
 
@@ -78,18 +79,19 @@ class SignUpRepositoryImpl(
                         var passwordDB = snapshot.child(userName).child("password").getValue(String::class.java)
                         var email = snapshot.child(userName).child("emailID").getValue(String::class.java)
                         if(passwordDB.equals(password)){
-                            val userEntity= UserEntity(
+                            val userEntity= ProfileEntity(
                                 id = 0,
                                 userName = userName,
                                 emailID = email
                             )
                             CoroutineScope(Dispatchers.IO).launch {
-//                                userDao.delete()
-//                                userDao.insert(userEntity)
-                                sharedPreferences.edit().putString("userName",userName).putString("email",email).apply()
+                                profileDao.delete()
+                                profileDao.insert(userEntity)
+                                continuation.resume(SignInDomain(isValid = true, profile = profileDao.getProfile().toProfileDomain()))
+//                                sharedPreferences.edit().putString("userName",userName).putString("email",email).apply()
 
                             }
-                            continuation.resume(SignInDomain(isValid = true))
+
                         }else {
                             continuation.resume(SignInDomain(isValid = false))
                         }
