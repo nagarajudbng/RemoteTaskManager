@@ -41,7 +41,7 @@ fun CustomDropDownMenu(
 //    viewModel: CheckListViewModel(),
     selected:String,
     label: String,
-    errorStatus:Error?,
+    errorStatus:String?,
     list: List<String>,
     onSelected: (String) -> Unit
 ) {
@@ -92,12 +92,12 @@ fun CustomDropDownMenu(
                 disabledPrefixColor = MaterialTheme.colorScheme.onSurfaceVariant,
                 disabledSuffixColor = MaterialTheme.colorScheme.onSurfaceVariant
             ),
-            isError = errorStatus == FieldStatus.FieldEmpty,
+            isError = errorStatus !=null,
             supportingText = {
-                if (errorStatus == FieldStatus.FieldEmpty) {
+                if (errorStatus != null) {
                     Text(
                         modifier = Modifier.fillMaxWidth(),
-                        text = "Field Selection Required",
+                        text = errorStatus,
                         color = MaterialTheme.colorScheme.error
                     )
                 }

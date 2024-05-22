@@ -14,26 +14,6 @@ class TaskCreateUseCase @Inject constructor(
     private var remoteRepositoryImpl: TaskRemoteRepositoryImpl
 ) {
 
-
-    suspend fun validate(task: Task): TaskResult {
-        val taskResult = TaskResult()
-
-        taskResult.title =
-            if (task.title.isEmpty()) FieldStatus.FieldEmpty else FieldStatus.FieldFilled
-        taskResult.description =
-            if (task.description.isEmpty()) FieldStatus.FieldEmpty else FieldStatus.FieldFilled
-        taskResult.status =
-            if (task.status.isEmpty() || task.status == "Select") FieldStatus.FieldEmpty else FieldStatus.FieldFilled
-         taskResult.dueDate =
-            if (task.dueDate.isEmpty() || task.dueDate == "Due date") FieldStatus.FieldEmpty else FieldStatus.FieldFilled
-        taskResult.isValid =
-            !(taskResult.title == FieldStatus.FieldEmpty || taskResult.description == FieldStatus.FieldEmpty || taskResult.dueDate==FieldStatus.FieldEmpty)
-
-        return taskResult
-
-
-    }
-
     suspend fun insert(task: Task): TaskResult {
         val result = localRepositoryImpl.insert(task.toTaskEntity())
         if(result>0){

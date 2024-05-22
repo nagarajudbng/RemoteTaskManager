@@ -164,10 +164,10 @@ fun TaskCreateScreen(
                         )
                 },
                 supportingText = {
-                    if (viewModel.titleState.value.error == FieldStatus.FieldEmpty) {
+                    if (viewModel.titleState.value.error != null) {
                         Text(
                             modifier = Modifier.fillMaxWidth(),
-                            text = "Title Required",
+                            text = viewModel.titleState.value.error!!,
                             color = MaterialTheme.colorScheme.error
                         )
                     }
@@ -199,10 +199,10 @@ fun TaskCreateScreen(
                         )
                 },
                 supportingText = {
-                    if (viewModel.descState.value.error  == FieldStatus.FieldEmpty) {
+                    if (viewModel.descState.value.error !=null) {
                         Text(
                             modifier = Modifier.fillMaxWidth(),
-                            text = "Description Required",
+                            text = viewModel.descState.value.error!!,
                             color = MaterialTheme.colorScheme.error
                         )
                     }
@@ -259,10 +259,10 @@ fun TaskCreateScreen(
                         })
                 },
                 supportingText = {
-                    if (viewModel.descState.value.error  == FieldStatus.FieldEmpty) {
+                    if (viewModel.dateSelectedState.value.error  != null) {
                         Text(
                             modifier = Modifier.fillMaxWidth(),
-                            text = "Date Selection Required",
+                            text = viewModel.dateSelectedState.value.error!!,
                             color = MaterialTheme.colorScheme.error
                         )
                     }

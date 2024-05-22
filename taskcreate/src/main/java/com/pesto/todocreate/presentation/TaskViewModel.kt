@@ -7,7 +7,13 @@ import androidx.lifecycle.viewModelScope
 import com.pesto.core.domain.model.Task
 import com.pesto.core.domain.states.TaskResult
 import com.pesto.core.presentation.UiEvent
+import com.pesto.core.presentation.Validations
+import com.pesto.todocreate.domain.usecase.DescriptionValidationUseCase
+import com.pesto.todocreate.domain.usecase.DueDateValidationUseCase
+import com.pesto.todocreate.domain.usecase.StatusValidationUseCase
 import com.pesto.todocreate.domain.usecase.TaskCreateUseCase
+import com.pesto.todocreate.domain.usecase.TitleValidationUseCase
+import com.pesto.todocreate.domain.util.InputStatus
 import com.single.core.states.StandardTextFieldState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -19,6 +25,10 @@ import kotlin.random.Random
 
 @HiltViewModel
 class TaskViewModel @Inject constructor(
+    private val titleValidationUseCase: TitleValidationUseCase,
+    private val descriptionValidationUseCase: DescriptionValidationUseCase,
+    private val statusValidationUseCase: StatusValidationUseCase,
+    private val dueDateValidationUseCase: DueDateValidationUseCase,
     private val taskCreateUseCase: TaskCreateUseCase
 ) : ViewModel() {
 
@@ -84,30 +94,61 @@ class TaskViewModel @Inject constructor(
 
             is TaskEvent.AddTask -> {
                 viewModelScope.launch {
-
-                    var task = Task(
-                        title = _titleState.value.text,
-                        description = _descState.value.text,
-                        status = _statusState.value.text,
-                        dueDate = _dateSelectedState.value.text
+                    val titleResult = titleValidationUseCase(_titleState.value.text)
+                    var errorMessage:String = when(titleResult){
+                        InputStatus.EMPTY-> "Title Required"
+                        InputStatus.LENGTH_TOO_SHORT-> "Title Minimum 10 Characters length"
+                        else -> {""}
+                    }
+                    _titleState.value = titleState.value.copy(
+                        error = errorMessage
                     )
-                    var taskResult = TaskResult()
-                    taskResult = taskCreateUseCase.validate(task)
 
 
-                    if (!taskResult.isValid) {
-                        _descState.value = descState.value.copy(
-                            error = taskResult.description
+                    val descriptionResult = descriptionValidationUseCase(_descState.value.text)
+                    errorMessage = when(descriptionResult){
+                        InputStatus.EMPTY-> "Description Required"
+                        InputStatus.LENGTH_TOO_SHORT-> "Description Too Short"
+                        else -> {""}
+                    }
+                    _descState.value = descState.value.copy(
+                        error = errorMessage
+                    )
+
+
+                    val statusResult = statusValidationUseCase(_statusState.value.text)
+                    errorMessage = when(statusResult){
+                        InputStatus.EMPTY-> "Status Required"
+                        else -> {""}
+                    }
+                    _statusState.value = statusState.value.copy(
+                        error = errorMessage
+                    )
+
+                    val dueDateResult = dueDateValidationUseCase(_dateSelectedState.value.text)
+                    errorMessage = when(dueDateResult){
+                        InputStatus.EMPTY-> "Due Date Required"
+                        else -> {""}
+                    }
+                    _dateSelectedState.value = dateSelectedState.value.copy(
+                        error = errorMessage
+                    )
+
+
+                    if(titleResult == InputStatus.VALID
+                        && descriptionResult == InputStatus.VALID
+                        && statusResult == InputStatus.VALID
+                        && dueDateResult == InputStatus.VALID){
+
+                        val task = Task(
+                            title = _titleState.value.text,
+                            description = _descState.value.text,
+                            status = _statusState.value.text,
+                            dueDate = _dateSelectedState.value.text
                         )
-                        _titleState.value = titleState.value.copy(
-                            error = taskResult.title
-                        )
-                        _statusState.value = statusState.value.copy(
-                            error = taskResult.status
-                        )
-                    } else {
+
                         dialogState.value = true
-                        taskResult = taskCreateUseCase.insert(task = task)
+                        val taskResult = taskCreateUseCase.insert(task = task)
                         taskResult.result?.let {
                             if (it > 0) {
                             }

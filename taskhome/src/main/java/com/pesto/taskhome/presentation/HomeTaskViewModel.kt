@@ -7,19 +7,25 @@ import androidx.lifecycle.viewModelScope
 import com.pesto.core.domain.model.Task
 import com.pesto.core.presentation.UiEvent
 import com.single.core.states.StandardTextFieldState
-import com.single.todohome.usecases.HomeTaskUseCase
+import com.single.todohome.usecases.DeleteTaskUseCase
+import com.single.todohome.usecases.FilterTaskUseCase
+import com.single.todohome.usecases.GetTaskListUseCase
+import com.single.todohome.usecases.SearchTaskUseCase
+import com.single.todohome.usecases.UpdateTaskUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class HomeTaskViewModel @Inject constructor(
-    private var homeTodoUseCase: HomeTaskUseCase
+    private var updateTaskUseCase: UpdateTaskUseCase,
+    private var deleteTaskUseCase: DeleteTaskUseCase,
+    private var getTaskListUseCase: GetTaskListUseCase,
+    private var filterTaskUseCase: FilterTaskUseCase,
+    private var searchTaskUseCase: SearchTaskUseCase,
 ):ViewModel() {
 
     private val _eventFlow = MutableSharedFlow<UiEvent>()
@@ -76,7 +82,7 @@ class HomeTaskViewModel @Inject constructor(
                     if (_filterState.value.text == "All") {
                         getTaskList()
                     } else {
-                        homeTodoUseCase.filter(event.query).collect {
+                        filterTaskUseCase.filter(event.query).collect {
                             todoList.value = it
                         }
                     }
@@ -94,7 +100,7 @@ class HomeTaskViewModel @Inject constructor(
 
     fun getTaskList() {
         viewModelScope.launch {
-            homeTodoUseCase.getTaskList().collect {
+            getTaskListUseCase.getTaskList().collect {
                 todoList.value = it
             }
         }
@@ -114,9 +120,9 @@ class HomeTaskViewModel @Inject constructor(
                     )
                     Log.d("Search update","update "+event.action)
                     if (event.action == "Delete") {
-                        homeTodoUseCase.delete(task)
+                        deleteTaskUseCase.delete(task)
                     } else {
-                        homeTodoUseCase.update(task)
+                        updateTaskUseCase.update(task)
                     }
                     searchWithQuery(_searchQuery.value)
                 }
@@ -129,7 +135,7 @@ class HomeTaskViewModel @Inject constructor(
     private fun searchWithQuery(query: String){
         viewModelScope.launch {
             if (_searchQuery.value.isNotBlank()) {
-                homeTodoUseCase.searchQuery(_searchQuery.value).collectLatest { value ->
+                searchTaskUseCase.searchQuery(_searchQuery.value).collectLatest { value ->
                     todoList.value = value
                 }
             }
