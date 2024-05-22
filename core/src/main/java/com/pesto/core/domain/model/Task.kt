@@ -5,5 +5,6 @@ data class Task(
     var title: String,
     var description: String,
     var status: String,
-    var dueDate: String
+    var dueDate: String,
+    var isDueDateOver:Boolean = false
 )

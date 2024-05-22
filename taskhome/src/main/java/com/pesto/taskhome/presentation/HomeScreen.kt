@@ -1,5 +1,6 @@
 package com.pesto.taskhome.presentation
 
+import android.annotation.SuppressLint
 import android.media.Image
 import android.util.Log
 import androidx.compose.foundation.background
@@ -47,10 +48,13 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.toUpperCase
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -62,6 +66,7 @@ import com.pesto.core.presentation.UiEvent
 import com.pesto.core.presentation.asString
 import com.pesto.taskhome.R
 import kotlinx.coroutines.flow.collectLatest
+import java.text.SimpleDateFormat
 
 // Created by Nagaraju Deshetty on 07/05/24.
 
@@ -266,9 +271,23 @@ fun ListItem(
                             .padding(top = 10.dp),
 
                     ) {
+                        var spanStyle:SpanStyle
+                        if (isDueDateOver(task.dueDate)) {
+                            spanStyle = SpanStyle(textDecoration = TextDecoration.LineThrough)
+                        } else {
+                            spanStyle = SpanStyle()
+                        }
                         Text(
                             modifier = Modifier.padding(start = 10.dp),
-                            text = task.title.toUpperCase(),
+                            text = AnnotatedString.Builder(task.title.toUpperCase())
+                                    .apply {
+                                        addStyle(
+                                            style = spanStyle,
+                                            start = 0,
+                                            end = task.title.length
+                                        )
+                                    }
+                                    .toAnnotatedString(),
                             maxLines = 1,
                             fontFamily = FontFamily.Monospace,
                             fontWeight = FontWeight.Light,
@@ -285,7 +304,15 @@ fun ListItem(
                         Spacer(modifier = Modifier.height(5.dp))
                         Text(
                             modifier = Modifier.padding(start = 10.dp),
-                            text = task.description,
+                            text = AnnotatedString.Builder(task.description)
+                                .apply {
+                                    addStyle(
+                                        style = spanStyle,
+                                        start = 0,
+                                        end = task.description.length
+                                    )
+                                }
+                                .toAnnotatedString(),
                             maxLines = 1,
                             color = Color.Black,
                             fontFamily = FontFamily.Monospace,
@@ -491,4 +518,26 @@ fun PopUpMenuButton(
         }
     }
 
+}
+@SuppressLint("SimpleDateFormat")
+fun isDueDateOver(dateString: String): Boolean {
+    val dateFormat = SimpleDateFormat("EEEE, dd MMMM, yyyy")
+
+    try {
+        val date = dateFormat.parse(dateString)
+
+        val targetTimestamp = date.time
+
+        val currentTimestamp = System.currentTimeMillis()
+
+        if (currentTimestamp > targetTimestamp) {
+            return true
+        } else {
+            return false
+        }
+
+    } catch (e: Exception) {
+        e.printStackTrace()
+    }
+    return false
 }
