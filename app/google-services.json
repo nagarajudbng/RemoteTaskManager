@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "254994114127",
+    "firebase_url": "https://remotetaskmanager-2b7e2-default-rtdb.firebaseio.com",
+    "project_id": "remotetaskmanager-2b7e2",
+    "storage_bucket": "remotetaskmanager-2b7e2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:254994114127:android:65d8296cd451201ac6ac3a",
+        "android_client_info": {
+          "package_name": "com.pesto.remotetaskmanager"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyASybOUmePrYJzoYDmsfsz2dcF3VV0hpUg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
