@@ -1,5 +1,5 @@
-<H3>Remote Task Manager</H3>
-<b>App Overview</b>
+<H2>Remote Task Manager</H2>
+<h4>App Overview</h4>
 
 Remote Task Manager is an Android application developed using Kotlin. It follows the MVVM (Model-View-ViewModel) Clean Architecture pattern and employs Google Play Feature Delivery and Multi-Module Architecture to deliver a modular, scalable, and optimized user experience. The app leverages Jetpack Compose for UI development, Dagger Hilt for dependency injection, and integrates Room database and Firebase for data storage, including image storage with Firebase Storage. Firebase Authentication is used for user authentication, and Coil is employed for efficient image loading. Navigation within the app is handled using Jetpack Compose Navigation. Continuous Integration (CI) is achieved through GitHub Actions, with unit test cases ensuring code quality and reliability.
 
@@ -28,7 +28,7 @@ Remote Task Manager is an Android application developed using Kotlin. It follows
 <img src="https://github.com/nagarajudbng/RemoteTaskManager/assets/2852460/d36a1574-f407-42c8-b7ff-e963af48e237" width="100" />
 </p>
 
-Features:
+<H2>Features</H2>
 1. Task Synchronization: Tasks are synchronized with Firebase Database, enabling users to access and manage tasks across devices seamlessly. This feature ensures data consistency and availability across platforms.
 2. Alarm and Reminder: Users can set alarms and reminders for their tasks, enhancing productivity and ensuring timely completion of tasks.
 3. Search Task: Users can search for specific tasks using keywords or filters, facilitating quick and efficient task retrieval.
@@ -42,7 +42,7 @@ Screens:
 3. Profile Screen: Displays user profile information and allows users to manage account settings.
 4. Home Screen: Shows a list of tasks, with options for searching, filtering, and updating tasks directly from the list.
 5. Create Task Screen: Allows users to create new tasks, including setting reminders and alarms.
-Architecture and Components:
+<H2>Architecture and Components</H2>
 * MVVM Clean Architecture: The app follows the MVVM pattern, separating concerns into Model, View, and ViewModel layers. This architecture promotes maintainability, testability, and scalability.
 * Model: Represents the data and business logic of your application. This includes data classes for tasks, user authentication, and any other entities in your app. In your case, the models handle task data stored locally in Room database and remotely in Firebase Realtime Database or Firestore.
 * View: Represents the UI of your application. In Jetpack Compose, your UI components (Composables) are part of the View layer. They observe changes in the ViewModel and update the UI accordingly. Views are responsible for displaying tasks, user authentication screens, and other UI elements.
