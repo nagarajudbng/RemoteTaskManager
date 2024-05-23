@@ -29,9 +29,9 @@ Remote Task Manager is an Android application developed using Kotlin. It follows
 </p>
 
 Features:
-1. Task Synchronization: Tasks are synchronized with Firebase Database, enabling users to access and manage tasks across devices seamlessly. This feature ensures data consistency and availability across platforms.
-2. Alarm and Reminder: Users can set alarms and reminders for their tasks, enhancing productivity and ensuring timely completion of tasks.
-3. Search Task: Users can search for specific tasks using keywords or filters, facilitating quick and efficient task retrieval.
+**1. Task Synchronization:** Tasks are synchronized with Firebase Database, enabling users to access and manage tasks across devices seamlessly. This feature ensures data consistency and availability across platforms.
+**2. Alarm and Reminder:** Users can set alarms and reminders for their tasks, enhancing productivity and ensuring timely completion of tasks.
+**3. Search Task:** Users can search for specific tasks using keywords or filters, facilitating quick and efficient task retrieval.
 4. Filter Tasks: Tasks can be filtered based on various criteria such as priority, due date, or category, aiding users in organizing and prioritizing their tasks effectively.
 5. Task Update in List: Users can update task details directly from the task list, providing a streamlined and intuitive user experience without navigating to separate screens.
 6. Offline Functionality: The app works offline, allowing users to access and manage tasks even without an internet connection. Changes made offline are seamlessly synced with Firebase Database when the device reconnects.
