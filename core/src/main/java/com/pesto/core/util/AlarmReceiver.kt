@@ -10,20 +10,11 @@ import android.content.pm.PackageManager
 import android.media.RingtoneManager
 import android.os.Build
 import android.os.Vibrator
-import android.view.WindowManager
 import android.widget.Toast
-import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.ui.platform.LocalContext
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.pesto.core.R
-import com.pesto.core.presentation.MyAlertDialog
 
 
 // Created by Nagaraju on 23/05/24.
