@@ -24,6 +24,7 @@ jobs:
       run: chmod +x gradlew
     - name: Build with Gradle
       run: ./gradlew build
+      
 unit-test:
       runs-on: ubuntu-latest
       steps:
