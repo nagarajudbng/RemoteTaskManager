@@ -236,7 +236,5 @@ class TaskViewModel @Inject constructor(
             val task = Task(title = list.get(Random.nextInt(list.size-1)),description = list.random(), status = statusList.get(Random.nextInt(statusList.size)), dueDate = dateList.random(), alarmTime = timeList.random())
             insert(task)
         }
-
     }
-
 }
