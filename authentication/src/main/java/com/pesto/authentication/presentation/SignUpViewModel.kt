@@ -35,15 +35,18 @@ class SignUpViewModel @Inject constructor(
     var signUpUseCase: SignUpUseCase,
     var signInUseCase: SignInUseCase
 ): ViewModel() {
-    private val _userName = mutableStateOf(StandardTextField("nagaraju"))
+//    private val _userName = mutableStateOf(StandardTextField("nagaraju"))
+//    private val _email = mutableStateOf(StandardTextField("nagaraju@gmail.com"))
+//    private val _password = mutableStateOf(StandardTextField("12345678"))
+//    private val _confirmPassword = mutableStateOf(StandardTextField("12345678"))
+    private val _userName = mutableStateOf(StandardTextField(""))
+    private val _email = mutableStateOf(StandardTextField(""))
+    private val _password = mutableStateOf(StandardTextField(""))
+    private val _confirmPassword = mutableStateOf(StandardTextField(""))
+
     val userName= _userName
-    private val _email = mutableStateOf(StandardTextField("nagaraju@gmail.com"))
     val email= _email
-
-    private val _password = mutableStateOf(StandardTextField("12345678"))
     val password= _password
-
-    private val _confirmPassword = mutableStateOf(StandardTextField("12345678"))
     val confirmPassword= _confirmPassword
 
     private val _passwordError = MutableLiveData(false)

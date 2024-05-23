@@ -2,13 +2,20 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     split="dynamic_feature1">
+
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM"/>
     <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+
     <application
         android:hasCode="true"
-        tools:replace="android:hasCode"
         tools:ignore="MissingApplicationIcon">
-        <receiver android:name="com.pesto.core.util.AlarmReceiver" />
+        <receiver android:name="com.pesto.core.util.AlarmReceiver" >
+<!--            <intent-filter>-->
+<!--                <action android:name="android.intent.action.MY_BROADCAST" />-->
+<!--            </intent-filter>-->
+        </receiver>
     </application>
 
 </manifest>

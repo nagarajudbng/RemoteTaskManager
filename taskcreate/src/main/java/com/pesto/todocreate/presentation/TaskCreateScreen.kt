@@ -51,7 +51,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
+import com.pesto.core.domain.model.ProfileDomain
 import com.pesto.core.presentation.UiEvent
 import com.pesto.core.presentation.AppBar
 import com.pesto.core.presentation.CustomDropDownMenu
@@ -114,7 +114,8 @@ fun TaskCreateScreen(
                 isFilterEnable = false,
                 isProfileEnable = false,
                 filter = {},
-                gotoProfile = {}
+                gotoProfile = {},
+                profile = ProfileDomain()
 
             )
         }

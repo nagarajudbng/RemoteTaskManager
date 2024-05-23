@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
@@ -142,6 +141,7 @@ fun TopBarView(
     viewModel: HomeTaskViewModel
 ) {
     val showSearch = viewModel.topBarState.value
+    viewModel.getProfile()
     if (!showSearch) {
         AppBar(
             title = stringResource(id = R.string.app_bar_title),
@@ -157,7 +157,8 @@ fun TopBarView(
             },
             gotoProfile = {
                 onNavigation(it)
-            }
+            },
+            profile = viewModel.profile.value
         )
     } else {
         SearchBar(

@@ -5,8 +5,10 @@ import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.pesto.core.domain.model.ProfileDomain
 import com.pesto.core.domain.model.Task
 import com.pesto.core.presentation.UiEvent
+import com.pesto.profile.domain.usecase.ProfileGetUseCase
 import com.single.core.states.StandardTextFieldState
 import com.single.todohome.usecases.DeleteTaskUseCase
 import com.single.todohome.usecases.FilterTaskUseCase
@@ -19,7 +21,9 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
+import java.util.Calendar
 import java.util.Date
+import java.util.Locale
 import javax.inject.Inject
 
 @HiltViewModel
@@ -29,6 +33,7 @@ class HomeTaskViewModel @Inject constructor(
     private var getTaskListUseCase: GetTaskListUseCase,
     private var filterTaskUseCase: FilterTaskUseCase,
     private var searchTaskUseCase: SearchTaskUseCase,
+    private val profileGetUseCase: ProfileGetUseCase
 ):ViewModel() {
 
     private val _eventFlow = MutableSharedFlow<UiEvent>()
@@ -45,6 +50,8 @@ class HomeTaskViewModel @Inject constructor(
 
     private val _sortState = mutableStateOf(StandardTextFieldState())
     val sortState = _sortState
+    private val _profile = mutableStateOf(ProfileDomain())
+    val profile = _profile
 
     private val _filterState = mutableStateOf(StandardTextFieldState())
     val filterState = _filterState
@@ -111,7 +118,7 @@ class HomeTaskViewModel @Inject constructor(
     }
     fun todoListTransformation(taskList: List<Task>): List<Task> {
         val updatedList = taskList.map { task ->
-            task.copy(isDueDateOver = isDueDateOver(task.dueDate))
+            task.copy(isDueDateOver = isDueDateOver(task.dueDate,task.alarmTime))
         }
         return updatedList
     }
@@ -151,12 +158,12 @@ class HomeTaskViewModel @Inject constructor(
         }
     }
     @SuppressLint("SimpleDateFormat")
-    fun isDueDateOver(dateString: String): Boolean {
-        val dateFormat = SimpleDateFormat("EEEE, dd MMMM, yyyy")
-
+    fun isDueDateOver(date: String, alarmTime: String): Boolean {
+        val dateTimeString = "${date} ${alarmTime}"
+        val dateFormat = SimpleDateFormat("EEEE, dd MMMM, yyyy hh:mm a", Locale.getDefault())
         try {
             // Parse the date string
-            val date = dateFormat.parse(dateString)
+            val date = dateFormat.parse(dateTimeString)
 
             // Get the Unix timestamp of the parsed date
             val targetTimestamp = date.time
@@ -180,7 +187,11 @@ class HomeTaskViewModel @Inject constructor(
             if (currentYear > targetYear || (currentYear == targetYear && (currentMonth > targetMonth || (currentMonth == targetMonth && currentDay > targetDay)))) {
                 return true
             } else if (currentYear == targetYear && currentMonth == targetMonth && currentDay == targetDay) {
-                return false
+                if(validateTime(alarmTime)){
+                    return true
+                } else {
+                    return false
+                }
             } else {
                 return false
             }
@@ -190,5 +201,31 @@ class HomeTaskViewModel @Inject constructor(
         }
         return false
     }
+    fun validateTime(alarmTime: String): Boolean {
+        // Parse the alarm time string
+        val timeFormat = SimpleDateFormat("hh:mm a", Locale.getDefault())
+        val alarmDateTime = timeFormat.parse(alarmTime)
+        val targetCalendar = Calendar.getInstance().apply {
+            time = alarmDateTime
+        }
 
+        // Get the current time
+        val currentCalendar = Calendar.getInstance()
+
+        // Set the year, month, and day to the current date to ensure only time comparison
+        targetCalendar.apply {
+            set(Calendar.YEAR, currentCalendar.get(Calendar.YEAR))
+            set(Calendar.MONTH, currentCalendar.get(Calendar.MONTH))
+            set(Calendar.DAY_OF_MONTH, currentCalendar.get(Calendar.DAY_OF_MONTH))
+        }
+
+        // Compare the time only
+        return currentCalendar.timeInMillis > targetCalendar.timeInMillis
+    }
+    fun getProfile(){
+        viewModelScope.launch {
+            val profileDomain = profileGetUseCase()
+            _profile.value = profileDomain
+        }
+    }
 }

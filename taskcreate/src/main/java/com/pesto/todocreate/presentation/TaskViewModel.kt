@@ -176,6 +176,7 @@ class TaskViewModel @Inject constructor(
                         dialogState.value = true
                         taskCreateUseCase.insert(task)
                         alarmState.value = true
+//                        generateRandomTask()
 //                        val taskResult = taskCreateUseCase.insert(task = task)
 //                        taskResult.result?.let {
 //                            if (it > 0) {
@@ -189,10 +190,10 @@ class TaskViewModel @Inject constructor(
 
     }
 
-     fun insert(task: Task) {
-//        viewModelScope.launch {
-//            taskCreateUseCase.insert(task)
-//        }
+     private fun insert(task: Task) {
+        viewModelScope.launch {
+            taskCreateUseCase.insert(task)
+        }
     }
 
     fun generateRandomTask(){
@@ -208,9 +209,31 @@ class TaskViewModel @Inject constructor(
             "Floss teeth (repeat daily)",
             "Build a morning routine"
         )
+        val dateList = listOf(
+            "Thursday, 16 May, 2024",
+            "Thursday, 5 May, 2024",
+            "Thursday, 15 July, 2024",
+            "Thursday, 20 May, 2024",
+            "Thursday, 23 May, 2024",
+            "Thursday, 24 May, 2024",
+            "Thursday, 25 May, 2024",
+            "Thursday, 26 May, 2024",
+            "Thursday, 27 May, 2024"
+        )
+        val timeList = listOf(
+            "09:15 PM",
+            "07:30 AM",
+            "08:45 PM",
+            "04:00 PM",
+            "04:15 AM",
+            "04:30 PM",
+            "04:45 PM",
+            "05:00 AM",
+            "05:00 PM",
+        )
         val statusList = listOf("To Do","In Progress","Done")
         for(i in 0..20){
-            val task = Task(title = list.get(Random.nextInt(list.size-1)),description = list.get(Random.nextInt(list.size-1)), status = statusList.get(Random.nextInt(statusList.size)), dueDate = "Thursday, 16 May, 2024", alarmTime = "14:15 PM")
+            val task = Task(title = list.get(Random.nextInt(list.size-1)),description = list.random(), status = statusList.get(Random.nextInt(statusList.size)), dueDate = dateList.random(), alarmTime = timeList.random())
             insert(task)
         }
 

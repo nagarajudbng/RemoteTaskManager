@@ -2,7 +2,6 @@ package com.pesto.core.presentation
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -29,15 +28,15 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.icons.filled.AccountBox
-import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
+import com.google.accompanist.coil.rememberCoilPainter
 import com.pesto.core.R
+import com.pesto.core.domain.model.ProfileDomain
 import com.pesto.core.util.ThemeColors
 
 
@@ -56,7 +55,8 @@ fun AppBar(
     isSearchEnable: Boolean,
     isFilterEnable:Boolean,
     isProfileEnable:Boolean,
-    gotoProfile:(String)->Unit
+    gotoProfile:(String)->Unit,
+    profile: ProfileDomain
 ) {
         TopAppBar(
             modifier = modifier
@@ -67,10 +67,27 @@ fun AppBar(
                     .fillMaxHeight()
                     .padding(start = 5.dp)) {
                     if(isProfileEnable) {
-                        Icon(
 
-                            imageVector = Icons.Filled.AccountBox,
-                            tint = Color.White,
+//                        Image(
+//                            // I replace this line
+//                            //painter = painterResource(id = R.drawable.ic_launcher_foreground),
+//                            painter = rememberCoilPainter(
+//                                request = viewModel.imageURI.value.uri, // or url
+//                                fadeIn = true // Optionally, you can enable a crossfade animation
+//                            ),
+////                    imageVector = Icons.Filled.AccountBox,
+//                            contentDescription = null,
+//                            contentScale = ContentScale.Crop,
+//                            modifier = Modifier
+//                                .fillMaxSize()
+//                                .clip(CircleShape)
+//                        )
+                        Image(
+
+                            painter = rememberCoilPainter(
+                                request = profile.image, // or url
+                                fadeIn = true // Optionally, you can enable a crossfade animation
+                            ),
                             contentDescription = null,
                             modifier = Modifier
                                 .size(50.dp)
@@ -171,6 +188,7 @@ fun HomeAppBarPreview() {
         isSearchEnable = false,
         isFilterEnable = false,
         isProfileEnable = false,
-        gotoProfile = {}
+        gotoProfile = {},
+        profile = ProfileDomain()
     )
 }
