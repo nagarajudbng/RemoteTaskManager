@@ -37,7 +37,7 @@ class DeleteTaskUseCaseTest {
 
     @Test
     fun delete()= runBlocking {
-        val task = Task(id = 1, title = "Task1", description = "Description1", status = "TO DO",dueDate = "Saturday, 25 May, 2024")
+        val task = Task(id = 1, title = "Task1", description = "Description1", status = "TO DO",dueDate = "Saturday, 25 May, 2024",alarmTime = "14:15 PM")
 
         deleteTaskUseCase.delete(task)
         verify(localRepositoryImpl).delete(task.toUpdateTaskEntity())

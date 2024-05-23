@@ -8,6 +8,7 @@ import com.pesto.core.domain.model.Task
 import com.pesto.core.domain.states.TaskResult
 import com.pesto.core.presentation.UiEvent
 import com.pesto.core.presentation.Validations
+import com.pesto.todocreate.domain.usecase.AlarmTimeValidationUseCase
 import com.pesto.todocreate.domain.usecase.DescriptionValidationUseCase
 import com.pesto.todocreate.domain.usecase.DueDateValidationUseCase
 import com.pesto.todocreate.domain.usecase.StatusValidationUseCase
@@ -29,6 +30,7 @@ class TaskViewModel @Inject constructor(
     private val descriptionValidationUseCase: DescriptionValidationUseCase,
     private val statusValidationUseCase: StatusValidationUseCase,
     private val dueDateValidationUseCase: DueDateValidationUseCase,
+    private val alarmTimeValidationUseCase: AlarmTimeValidationUseCase,
     private val taskCreateUseCase: TaskCreateUseCase
 ) : ViewModel() {
 
@@ -38,6 +40,9 @@ class TaskViewModel @Inject constructor(
 
     private val _dateSelectedState = mutableStateOf(StandardTextFieldState("Due date"))
     val dateSelectedState = _dateSelectedState
+
+    private val _timeSelectedState = mutableStateOf(StandardTextFieldState("Alarm Time"))
+    val timeSelectedState = _timeSelectedState
 
     private val _titleState = mutableStateOf(StandardTextFieldState())
     val titleState = _titleState
@@ -53,6 +58,9 @@ class TaskViewModel @Inject constructor(
 
     private val _dialogState = mutableStateOf(false)
     val dialogState = _dialogState
+
+    private val _alarmState = mutableStateOf(false)
+    val alarmState = _alarmState
 
     private val _searchQuery = mutableStateOf("")
     val searchQuery = _searchQuery
@@ -77,7 +85,11 @@ class TaskViewModel @Inject constructor(
                     text = event.date
                 )
             }
-
+            is TaskEvent.EnteredAlarmTime ->{
+                _timeSelectedState.value = timeSelectedState.value.copy(
+                    text = event.time
+                )
+            }
             is TaskEvent.EnteredStatus -> {
                 _statusState.value = statusState.value.copy(
                     text = event.status
@@ -134,22 +146,36 @@ class TaskViewModel @Inject constructor(
                         error = errorMessage
                     )
 
+                    val alarmResult = alarmTimeValidationUseCase(_timeSelectedState.value.text)
+                    errorMessage = when(alarmResult){
+                        InputStatus.EMPTY-> "Alarm Time Required"
+                        else -> {""}
+                    }
+                    _timeSelectedState.value = timeSelectedState.value.copy(
+                        error = errorMessage
+                    )
+
+
+
 
                     if(titleResult == InputStatus.VALID
                         && descriptionResult == InputStatus.VALID
                         && statusResult == InputStatus.VALID
-                        && dueDateResult == InputStatus.VALID){
+                        && dueDateResult == InputStatus.VALID
+                        && alarmResult == InputStatus.VALID
+                        ){
 
                         val task = Task(
                             title = _titleState.value.text,
                             description = _descState.value.text,
                             status = _statusState.value.text,
-                            dueDate = _dateSelectedState.value.text
+                            dueDate = _dateSelectedState.value.text,
+                            alarmTime = _timeSelectedState.value.text
                         )
 
                         dialogState.value = true
-//                        insert(task)
                         taskCreateUseCase.insert(task)
+                        alarmState.value = true
 //                        val taskResult = taskCreateUseCase.insert(task = task)
 //                        taskResult.result?.let {
 //                            if (it > 0) {
@@ -184,7 +210,7 @@ class TaskViewModel @Inject constructor(
         )
         val statusList = listOf("To Do","In Progress","Done")
         for(i in 0..20){
-            val task = Task(title = list.get(Random.nextInt(list.size-1)),description = list.get(Random.nextInt(list.size-1)), status = statusList.get(Random.nextInt(statusList.size)), dueDate = "Thursday, 16 May, 2024")
+            val task = Task(title = list.get(Random.nextInt(list.size-1)),description = list.get(Random.nextInt(list.size-1)), status = statusList.get(Random.nextInt(statusList.size)), dueDate = "Thursday, 16 May, 2024", alarmTime = "14:15 PM")
             insert(task)
         }
 

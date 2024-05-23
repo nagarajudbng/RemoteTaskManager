@@ -124,7 +124,8 @@ class HomeTaskViewModel @Inject constructor(
                         title = event.task.title,
                         description = event.task.description,
                         status = event.action,
-                        dueDate = event.task.dueDate
+                        dueDate = event.task.dueDate,
+                        alarmTime = event.task.alarmTime
                     )
                     Log.d("Search update","update "+event.action)
                     if (event.action == "Delete") {

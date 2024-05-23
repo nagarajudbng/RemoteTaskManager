@@ -13,7 +13,8 @@ fun TaskEntity.toTask():Task{
         title  = title,
         description = description,
         status = status,
-        dueDate = dueDate
+        dueDate = dueDate,
+        alarmTime = alarmTime
     )
 }
 
@@ -34,7 +35,8 @@ fun Task.toTaskEntity():TaskEntity{
         title = title,
         description=description,
         status = status,
-        dueDate = dueDate
+        dueDate = dueDate,
+        alarmTime = alarmTime
     )
 }
 
@@ -44,6 +46,7 @@ fun Task.toUpdateTaskEntity():TaskEntity{
         title = title,
         description=description,
         status = status,
-        dueDate =dueDate
+        dueDate =dueDate,
+        alarmTime = alarmTime
     )
 }

@@ -403,18 +403,20 @@ fun ListItem(
                         iconTint = Color.Black
                     )
                 }
-
+                Row(
+                    modifier = Modifier.fillMaxSize(),
+                    verticalAlignment = Alignment.Bottom,
+                    horizontalArrangement = Arrangement.Start
+                )
+                {
 
 
                     Text(
                         modifier = Modifier
-                            .wrapContentHeight()
                             .fillMaxWidth()
-                            .align(Alignment.BottomCenter)
                             .background(ThemeColors.dueDateColor),
-
-                        textAlign = TextAlign.End,
-                        text = " ",
+                        textAlign = TextAlign.Start,
+                        text = "Alarm Time: ${task.alarmTime}",
                         color = Color.White,
                         fontFamily = FontFamily.Monospace,
                         fontWeight = FontWeight.Light,
@@ -427,6 +429,7 @@ fun ListItem(
                             )
                         )
                     )
+                }
             }
         }
     }

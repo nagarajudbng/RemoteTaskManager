@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.android)
     kotlin("kapt")
     alias(libs.plugins.hilt)
+//    id("com.android.dynamic-feature")
 }
 
 android {
@@ -13,7 +14,7 @@ android {
         minSdk = 24
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        consumerProguardFiles("consumer-rules.pro")
+//        consumerProguardFiles("consumer-rules.pro")
     }
 
     buildTypes {

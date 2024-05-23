@@ -1,6 +1,11 @@
 package com.pesto.todocreate.presentation
 
+import android.app.AlarmManager
+import android.app.PendingIntent
+import android.content.Context
+import android.content.Intent
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -46,15 +51,20 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.pesto.core.presentation.UiEvent
 import com.pesto.core.presentation.AppBar
 import com.pesto.core.presentation.CustomDropDownMenu
 import com.pesto.core.presentation.DatePickerWithDialog
+import com.pesto.core.presentation.TimePickerWithDialog
 import com.pesto.core.presentation.asString
+import com.pesto.core.util.AlarmReceiver
 import com.pesto.core.util.ThemeColors
 import com.pesto.todocreate.R
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 // Created by Nagaraju Deshetty on 07/05/
 
@@ -77,6 +87,7 @@ fun TaskCreateScreen(
     val viewModel = hiltViewModel<TaskViewModel>()
     val  context = LocalContext.current
     ProgressDialogBox(viewModel = viewModel)
+    setAlarm(context,viewModel)
     LaunchedEffect(key1 = true) {
         viewModel.eventFlow.collectLatest { event ->
             when (event) {
@@ -107,7 +118,7 @@ fun TaskCreateScreen(
 
             )
         }
-    ) {
+    ) { it ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -250,6 +261,53 @@ fun TaskCreateScreen(
                 },
             )
             Spacer(modifier = Modifier.height(16.dp))
+            OutlinedTextField(
+                modifier = Modifier.fillMaxWidth(),
+                value = viewModel.timeSelectedState.value.text,
+                onValueChange = {
+                    viewModel.timeSelectedState.value.text = it
+                },
+                readOnly = true,
+                enabled = false,
+                colors = OutlinedTextFieldDefaults.colors(
+                    disabledTextColor = MaterialTheme.colorScheme.onSurface,
+                    disabledContainerColor = Color.Transparent,
+                    disabledBorderColor = MaterialTheme.colorScheme.outline,
+                    disabledLeadingIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                    disabledTrailingIconColor = MaterialTheme.colorScheme.onSurface,
+                    disabledLabelColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                    disabledPlaceholderColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                    disabledSupportingTextColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                    disabledPrefixColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                    disabledSuffixColor = MaterialTheme.colorScheme.onSurfaceVariant
+                ),
+
+                maxLines= 1,
+                textStyle = TextStyle(
+                    color = Black,
+                    fontFamily = FontFamily.Monospace,
+                    fontWeight = FontWeight.Light,
+                    fontSize = with(LocalDensity.current) { 14.sp }
+
+                ),
+
+                trailingIcon = {
+                    TimePickerWithDialog(
+                        onSelected = {
+                            viewModel.onEvent(TaskEvent.EnteredAlarmTime(it))
+                        })
+                },
+                supportingText = {
+                    if (viewModel.timeSelectedState.value.error  != null) {
+                        Text(
+                            modifier = Modifier.fillMaxWidth(),
+                            text = viewModel.timeSelectedState.value.error!!,
+                            color = MaterialTheme.colorScheme.error
+                        )
+                    }
+                },
+            )
+            Spacer(modifier = Modifier.height(16.dp))
             Row(
                 modifier = Modifier
                     .fillMaxSize(),
@@ -263,6 +321,7 @@ fun TaskCreateScreen(
                     onClick = {
                         viewModel.onEvent(TaskEvent.AddTask)
 //                      viewModel.generateRandomTask()
+
                     },
                     colors = ButtonDefaults.buttonColors(
                         containerColor = ThemeColors.buttonsBackgroundColor
@@ -275,7 +334,26 @@ fun TaskCreateScreen(
 
     }
 }
+fun setAlarm(context: Context,viewModel: TaskViewModel) {
+    val alarmState = viewModel.alarmState.value
+    if(alarmState) {
+        val dateTimeString = "${viewModel.dateSelectedState.value.text} ${viewModel.timeSelectedState.value.text}"
+        Log.d("dateTimeString",dateTimeString)
+        val dateFormat = SimpleDateFormat("EEEE, dd MMMM, yyyy hh:mm a", Locale.getDefault())
+        Log.d("dataTimeString format = ",dateFormat.format(dateFormat.parse(dateTimeString)))
+        val alarmDateTime = dateFormat.parse(dateTimeString)
 
+        // Set up AlarmManager
+        val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        val intent = Intent(context, AlarmReceiver::class.java)
+//        val pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+        val pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
+
+
+        // Set the alarm
+        alarmManager.set(AlarmManager.RTC_WAKEUP, alarmDateTime.time, pendingIntent)
+    }
+}
 
 @Composable
 fun ProgressDialogBox(viewModel: TaskViewModel){

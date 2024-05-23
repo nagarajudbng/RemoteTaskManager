@@ -1,4 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    split="dynamic_feature1">
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM"/>
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <application
+        android:hasCode="true"
+        tools:replace="android:hasCode"
+        tools:ignore="MissingApplicationIcon">
+        <receiver android:name="com.pesto.core.util.AlarmReceiver" />
+    </application>
 
 </manifest>

@@ -23,7 +23,8 @@ class FilterTaskUseCase @Inject constructor(
                     title = taskEntity.title,
                     description = taskEntity.description,
                     status = taskEntity.status,
-                    dueDate = taskEntity.dueDate
+                    dueDate = taskEntity.dueDate,
+                    alarmTime = taskEntity.alarmTime
                 )
             }
         }

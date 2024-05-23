@@ -6,7 +6,7 @@ val Purple80 = Color(0xFFD0BCFF)
 val PurpleGrey80 = Color(0xFFCCC2DC)
 val Pink80 = Color(0xFFEFB8C8)
 
-val Green = Color(0xFF396803)
+val Green = Color(0xFF862626)
 
 
 val CustomThemColorStatusBar = Color(0xFF396803)

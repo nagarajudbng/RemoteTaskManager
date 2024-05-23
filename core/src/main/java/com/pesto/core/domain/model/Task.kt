@@ -6,5 +6,6 @@ data class Task(
     var description: String,
     var status: String,
     var dueDate: String,
+    var alarmTime: String,
     var isDueDateOver:Boolean = false
 )

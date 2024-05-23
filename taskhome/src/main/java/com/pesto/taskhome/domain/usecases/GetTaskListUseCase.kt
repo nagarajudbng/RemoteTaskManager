@@ -23,7 +23,7 @@ class GetTaskListUseCase @Inject constructor(
                     description = taskEntity.description,
                     status = taskEntity.status,
                     dueDate = taskEntity.dueDate,
-
+                    alarmTime = taskEntity.alarmTime
                 )
             }
         }

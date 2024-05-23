@@ -37,7 +37,7 @@ class TaskLocalRepositoryImplTest {
     @Test
     fun insertTaskTest()= runBlocking {
         val expectedId = 123L
-        var task = TaskEntity(id = 1, title = "task1",description = "description1",status = "To Do", dueDate = "Saturday, 25 May, 2024")
+        var task = TaskEntity(id = 1, title = "task1",description = "description1",status = "To Do", dueDate = "Saturday, 25 May, 2024",alarmTime = "14:15 PM")
         `when`(appDatabase.taskDao).thenReturn(taskDao)
         `when`(taskDao.insert(task)).thenReturn(expectedId)
 
@@ -49,7 +49,7 @@ class TaskLocalRepositoryImplTest {
 
     @Test
     fun deleteTaskTest()= runBlocking {
-        var task = TaskEntity(id = 1, title = "task1",description = "description1",status = "To Do",dueDate = "Saturday, 25 May, 2024")
+        var task = TaskEntity(id = 1, title = "task1",description = "description1",status = "To Do",dueDate = "Saturday, 25 May, 2024",alarmTime = "14:15 PM")
         `when`(appDatabase.taskDao).thenReturn(taskDao)
         repository.delete(task)
         verify(taskDao).delete(task.id)
@@ -58,7 +58,7 @@ class TaskLocalRepositoryImplTest {
 
     @Test
     fun updateTaskTest()= runBlocking {
-        var task = TaskEntity(id = 1, title = "task1",description = "description1",status = "To Do",dueDate = "Saturday, 25 May, 2024")
+        var task = TaskEntity(id = 1, title = "task1",description = "description1",status = "To Do",dueDate = "Saturday, 25 May, 2024",alarmTime = "14:15 PM")
         `when`(appDatabase.taskDao).thenReturn(taskDao)
         repository.update(task)
         verify(taskDao).update(task)

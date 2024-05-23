@@ -34,7 +34,7 @@ class TaskCreateUseCaseTest {
 
     @Test
     fun insertTaskTest(): Unit = runBlocking {
-        val task = Task(id = 1, title = "Task1", description = "Description1", status = "TO DO",dueDate = "Saturday, 25 May, 2024")
+        val task = Task(id = 1, title = "Task1", description = "Description1", status = "TO DO",dueDate = "Saturday, 25 May, 2024",alarmTime = "14:15 PM")
         val id = 1L
         `when`(localRepositoryImpl.insert(task.toTaskEntity())).thenReturn(id)
         todoCreateUseCase.insert(task)
