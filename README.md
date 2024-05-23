@@ -1,7 +1,8 @@
 App Overview:
 Remote Task Manager is an Android application developed using Kotlin. It follows the MVVM (Model-View-ViewModel) Clean Architecture pattern and employs Google Play Feature Delivery and Multi-Module Architecture to deliver a modular, scalable, and optimized user experience. The app leverages Jetpack Compose for UI development, Dagger Hilt for dependency injection, and integrates Room database and Firebase for data storage, including image storage with Firebase Storage. Firebase Authentication is used for user authentication, and Coil is employed for efficient image loading. Navigation within the app is handled using Jetpack Compose Navigation. Continuous Integration (CI) is achieved through GitHub Actions, with unit test cases ensuring code quality and reliability.
 
-<p float="left">![22](https://github.com/nagarajudbng/RemoteTaskManager/assets/2852460/2824fbd7-10b4-4723-8ed2-17ec18c17ff7)
+<p float="left">
+<img src="![22](https://github.com/nagarajudbng/RemoteTaskManager/assets/2852460/2824fbd7-10b4-4723-8ed2-17ec18c17ff7)" width="100" />
 <img src="![21](https://github.com/nagarajudbng/RemoteTaskManager/assets/2852460/422ae98c-2293-4ebd-a767-afc12d87d904)" width="100" />
 <img src="![20](https://github.com/nagarajudbng/RemoteTaskManager/assets/2852460/000917c9-6fff-4e7a-9ec5-80338e4f6346)" width="100" />
 <img src="![19](https://github.com/nagarajudbng/RemoteTaskManager/assets/2852460/e5698eef-7fd5-4bb2-ac67-0d38c6c0fb74)" width="100" />
