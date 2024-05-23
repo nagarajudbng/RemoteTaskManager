@@ -157,50 +157,34 @@ class HomeTaskViewModel @Inject constructor(
             }
         }
     }
-    @SuppressLint("SimpleDateFormat")
-    fun isDueDateOver(date: String, alarmTime: String): Boolean {
+
+    private fun isDueDateOver(date: String, alarmTime: String): Boolean {
         val dateTimeString = "${date} ${alarmTime}"
         val dateFormat = SimpleDateFormat("EEEE, dd MMMM, yyyy hh:mm a", Locale.getDefault())
-        try {
-            // Parse the date string
-            val date = dateFormat.parse(dateTimeString)
+        val dateParsed = dateFormat.parse(dateTimeString)
+        // Target date
+//        val targetDateStr = "Mon May 27 04:20:00 GMT+05:30 2024"
+        val targetDateFormat = SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH)
+        val targetDate = dateParsed//targetDateFormat.parse(dateParsed.toString())
 
-            // Get the Unix timestamp of the parsed date
-            val targetTimestamp = date.time
+        val currentDate = Date()
+        // Convert dates to Unix timestamps
+        val currentTimestamp = currentDate.time
+        val targetTimestamp = targetDate.time
 
-            // Get the current Unix timestamp
-            val currentTimestamp = System.currentTimeMillis()
+        // Check if the target date has passed the current date
+        val isOverdue = currentTimestamp > targetTimestamp
 
-            // Get the current date components
-            val currentDate = Date(currentTimestamp)
-            val currentDay = currentDate.day
-            val currentMonth = currentDate.month
-            val currentYear = currentDate.year
-
-            // Get the parsed date components
-            val targetDate = Date(targetTimestamp)
-            val targetDay = targetDate.day
-            val targetMonth = targetDate.month
-            val targetYear = targetDate.year
-
-            // Compare the date components
-            if (currentYear > targetYear || (currentYear == targetYear && (currentMonth > targetMonth || (currentMonth == targetMonth && currentDay > targetDay)))) {
-                return true
-            } else if (currentYear == targetYear && currentMonth == targetMonth && currentDay == targetDay) {
-                if(validateTime(alarmTime)){
-                    return true
-                } else {
-                    return false
-                }
-            } else {
-                return false
-            }
-
-        } catch (e: Exception) {
-            e.printStackTrace()
+        // Print results
+        println("Current date: $currentDate")
+        println("Target date: $targetDate")
+        if (isOverdue) {
+            return true
+        } else {
+            return false
         }
-        return false
     }
+  
     fun validateTime(alarmTime: String): Boolean {
         // Parse the alarm time string
         val timeFormat = SimpleDateFormat("hh:mm a", Locale.getDefault())
