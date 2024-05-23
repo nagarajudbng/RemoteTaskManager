@@ -2,28 +2,28 @@ App Overview:
 Remote Task Manager is an Android application developed using Kotlin. It follows the MVVM (Model-View-ViewModel) Clean Architecture pattern and employs Google Play Feature Delivery and Multi-Module Architecture to deliver a modular, scalable, and optimized user experience. The app leverages Jetpack Compose for UI development, Dagger Hilt for dependency injection, and integrates Room database and Firebase for data storage, including image storage with Firebase Storage. Firebase Authentication is used for user authentication, and Coil is employed for efficient image loading. Navigation within the app is handled using Jetpack Compose Navigation. Continuous Integration (CI) is achieved through GitHub Actions, with unit test cases ensuring code quality and reliability.
 
 <p float="left">
-<img src="![22](https://github.com/nagarajudbng/RemoteTaskManager/assets/2852460/2824fbd7-10b4-4723-8ed2-17ec18c17ff7)" width="100" />
-<img src="![21](https://github.com/nagarajudbng/RemoteTaskManager/assets/2852460/422ae98c-2293-4ebd-a767-afc12d87d904)" width="100" />
-<img src="![20](https://github.com/nagarajudbng/RemoteTaskManager/assets/2852460/000917c9-6fff-4e7a-9ec5-80338e4f6346)" width="100" />
-<img src="![19](https://github.com/nagarajudbng/RemoteTaskManager/assets/2852460/e5698eef-7fd5-4bb2-ac67-0d38c6c0fb74)" width="100" />
-<img src="![18](https://github.com/nagarajudbng/RemoteTaskManager/assets/2852460/8d504d94-78fc-4f04-b635-beacb041c29d)" width="100" />
-<img src="![17](https://github.com/nagarajudbng/RemoteTaskManager/assets/2852460/a47197d4-b7d1-45dc-977d-618a050a517c)" width="100" />
-<img src="![16](https://github.com/nagarajudbng/RemoteTaskManager/assets/2852460/1097eb1b-1c10-4505-bbf2-4236661ec1dd)" width="100" />
-<img src="![15](https://github.com/nagarajudbng/RemoteTaskManager/assets/2852460/b6ab9062-2d66-498d-823d-a2a78417ac5d)" width="100" />
-<img src="![14](https://github.com/nagarajudbng/RemoteTaskManager/assets/2852460/c95f174a-a5b3-49ce-853d-e516a1afceb4)" width="100" />
-<img src="![13](https://github.com/nagarajudbng/RemoteTaskManager/assets/2852460/18472d53-d566-408f-bb0b-211c7a8eab10)" width="100" />
-<img src="![12](https://github.com/nagarajudbng/RemoteTaskManager/assets/2852460/0576da63-27cc-42f7-a683-9c32978f8462)" width="100" />
-<img src="![11](https://github.com/nagarajudbng/RemoteTaskManager/assets/2852460/8be7af09-d72a-4e90-9c55-6811edbcb6e5)" width="100" />
-<img src="![10](https://github.com/nagarajudbng/RemoteTaskManager/assets/2852460/dc013afd-bdc8-4761-a499-345b66610a2c)" width="100" />
-<img src="![9](https://github.com/nagarajudbng/RemoteTaskManager/assets/2852460/6b573857-e582-4873-805b-ee22c6e9780b)" width="100" />
-<img src="![8](https://github.com/nagarajudbng/RemoteTaskManager/assets/2852460/f32cd576-c9f9-4b7c-b5d8-73eed93a40f8)" width="100" />
-<img src="![7](https://github.com/nagarajudbng/RemoteTaskManager/assets/2852460/0bff9f0f-9995-4cd4-aa34-539fde400836)" width="100" />
-<img src="![6](https://github.com/nagarajudbng/RemoteTaskManager/assets/2852460/25013fc7-abbf-4283-885c-68a1a6b11bc8)" width="100" />
-<img src="![5](https://github.com/nagarajudbng/RemoteTaskManager/assets/2852460/c6975725-95d4-48f7-b67f-40371b9c316a)" width="100" />
-<img src="![4](https://github.com/nagarajudbng/RemoteTaskManager/assets/2852460/164a8693-03ca-4447-89ed-8f1b602d43db)" width="100" />
-<img src="![3](https://github.com/nagarajudbng/RemoteTaskManager/assets/2852460/6bce7c83-209a-4559-9c4b-a93ce9e25c17)" width="100" />
-<img src="![2](https://github.com/nagarajudbng/RemoteTaskManager/assets/2852460/9b24ce7f-21b5-4d52-be82-bd02cdb74539)" width="100" />
-<img src="![1](https://github.com/nagarajudbng/RemoteTaskManager/assets/2852460/d36a1574-f407-42c8-b7ff-e963af48e237)" width="100" />
+<img src="https://github.com/nagarajudbng/RemoteTaskManager/assets/2852460/2824fbd7-10b4-4723-8ed2-17ec18c17ff7" width="100" />
+<img src="https://github.com/nagarajudbng/RemoteTaskManager/assets/2852460/422ae98c-2293-4ebd-a767-afc12d87d904" width="100" />
+<img src="https://github.com/nagarajudbng/RemoteTaskManager/assets/2852460/000917c9-6fff-4e7a-9ec5-80338e4f6346" width="100" />
+<img src="https://github.com/nagarajudbng/RemoteTaskManager/assets/2852460/e5698eef-7fd5-4bb2-ac67-0d38c6c0fb74" width="100" />
+<img src="https://github.com/nagarajudbng/RemoteTaskManager/assets/2852460/8d504d94-78fc-4f04-b635-beacb041c29d" width="100" />
+<img src="https://github.com/nagarajudbng/RemoteTaskManager/assets/2852460/a47197d4-b7d1-45dc-977d-618a050a517c" width="100" />
+<img src="https://github.com/nagarajudbng/RemoteTaskManager/assets/2852460/1097eb1b-1c10-4505-bbf2-4236661ec1dd" width="100" />
+<img src="https://github.com/nagarajudbng/RemoteTaskManager/assets/2852460/b6ab9062-2d66-498d-823d-a2a78417ac5d" width="100" />
+<img src="https://github.com/nagarajudbng/RemoteTaskManager/assets/2852460/c95f174a-a5b3-49ce-853d-e516a1afceb4" width="100" />
+<img src="https://github.com/nagarajudbng/RemoteTaskManager/assets/2852460/18472d53-d566-408f-bb0b-211c7a8eab10" width="100" />
+<img src="https://github.com/nagarajudbng/RemoteTaskManager/assets/2852460/0576da63-27cc-42f7-a683-9c32978f8462" width="100" />
+<img src="https://github.com/nagarajudbng/RemoteTaskManager/assets/2852460/8be7af09-d72a-4e90-9c55-6811edbcb6e5" width="100" />
+<img src="https://github.com/nagarajudbng/RemoteTaskManager/assets/2852460/dc013afd-bdc8-4761-a499-345b66610a2c" width="100" />
+<img src="https://github.com/nagarajudbng/RemoteTaskManager/assets/2852460/6b573857-e582-4873-805b-ee22c6e9780b" width="100" />
+<img src="https://github.com/nagarajudbng/RemoteTaskManager/assets/2852460/f32cd576-c9f9-4b7c-b5d8-73eed93a40f8" width="100" />
+<img src="https://github.com/nagarajudbng/RemoteTaskManager/assets/2852460/0bff9f0f-9995-4cd4-aa34-539fde400836" width="100" />
+<img src="https://github.com/nagarajudbng/RemoteTaskManager/assets/2852460/25013fc7-abbf-4283-885c-68a1a6b11bc8" width="100" />
+<img src="https://github.com/nagarajudbng/RemoteTaskManager/assets/2852460/c6975725-95d4-48f7-b67f-40371b9c316a" width="100" />
+<img src="https://github.com/nagarajudbng/RemoteTaskManager/assets/2852460/164a8693-03ca-4447-89ed-8f1b602d43db" width="100" />
+<img src="https://github.com/nagarajudbng/RemoteTaskManager/assets/2852460/6bce7c83-209a-4559-9c4b-a93ce9e25c17" width="100" />
+<img src="https://github.com/nagarajudbng/RemoteTaskManager/assets/2852460/9b24ce7f-21b5-4d52-be82-bd02cdb74539" width="100" />
+<img src="https://github.com/nagarajudbng/RemoteTaskManager/assets/2852460/d36a1574-f407-42c8-b7ff-e963af48e237" width="100" />
 </p>
 
 Features:
