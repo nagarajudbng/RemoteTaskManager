@@ -2,6 +2,7 @@ package com.pesto.taskhome
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.pesto.core.domain.model.Task
+import com.pesto.profile.domain.usecase.ProfileGetUseCase
 import com.pesto.taskhome.presentation.HomeTaskViewModel
 import com.single.todohome.usecases.DeleteTaskUseCase
 import com.single.todohome.usecases.FilterTaskUseCase
@@ -53,6 +54,9 @@ class HomeTaskViewModelTest{
 
     @Mock
     lateinit var searchTaskUseCase: SearchTaskUseCase
+
+    @Mock
+    lateinit var profileUseCase: ProfileGetUseCase
 
     // Set up rule to swap background executor used by the Architecture Components with a different one
     @get:Rule
